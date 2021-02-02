@@ -16,26 +16,27 @@ NEWSPIDER_MODULE = 'game.spiders'
 ##############下面是Scrapy-Redis相关配置################
 ######################################################
 
-# 指定Redis的主机名和端口
-REDIS_HOST = '212.64.83.246'
-REDIS_PORT = 6379
+# # 指定Redis的主机名和端口
+# REDIS_HOST = '212.64.83.246'
+# REDIS_PORT = 6379
+#
+# # 调度器启用Redis存储Requests队列,确保request存储到redis中
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+#
+# # 确保所有的爬虫实例使用Redis进行重复过滤,确保所有爬虫共享相同的去重指纹
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+#
+# # 将Requests队列持久化到Redis，可支持暂停或重启爬虫
+# SCHEDULER_PERSIST = True
+#
+# # Requests的调度策略，默认优先级队列
+# SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.PriorityQueue'
+#
+# # 将爬取到的items保存到Redis 以便进行后续处理
+# ITEM_PIPELINES = {
+# 	'scrapy_redis.pipelines.RedisPipeline': 300
+# }
 
-# 调度器启用Redis存储Requests队列,确保request存储到redis中
-SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-
-# 确保所有的爬虫实例使用Redis进行重复过滤,确保所有爬虫共享相同的去重指纹
-DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-
-# 将Requests队列持久化到Redis，可支持暂停或重启爬虫
-SCHEDULER_PERSIST = True
-
-# Requests的调度策略，默认优先级队列
-SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.PriorityQueue'
-
-# 将爬取到的items保存到Redis 以便进行后续处理
-ITEM_PIPELINES = {
-	'scrapy_redis.pipelines.RedisPipeline': 300
-}
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'game (+http://www.yourdomain.com)'
 
@@ -80,6 +81,7 @@ DEFAULT_REQUEST_HEADERS = {
 #设置下载中间件,随机ua
 DOWNLOADER_MIDDLEWARES = {
 	'game.middlewares.UserAgentDownloadMiddleware': 543,
+	#'game.middlewares.BilibiliSeleniumMiddleware': 550,
 }
 
 # Enable or disable extensions
@@ -90,9 +92,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-	'game.pipelines.GamePipeline': 300,
-}
+# ITEM_PIPELINES = {
+# 	'game.pipelines.GamePipeline': 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
