@@ -2,14 +2,9 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
-
 import scrapy
 
 
-class GameItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
 class BilibiliGameTypeItem(scrapy.Item):
     # #保存图片链接
     # image_urls = scrapy.Field()
@@ -18,7 +13,27 @@ class BilibiliGameTypeItem(scrapy.Item):
 
     #游戏名称
     game_title = scrapy.Field()
-    #游戏简称
+    #游戏别称
     game_subTitle = scrapy.Field()
     #游戏图片链接
-    gameLogo_urls = scrapy.Field()
+    game_logoUrl = scrapy.Field()
+
+class BilibiliGameMatchItem(scrapy.Item):
+    #赛事id
+    match_id = scrapy.Field()
+    #赛事标题
+    match_title = scrapy.Field()
+    #赛事别称
+    match_subTitle = scrapy.Field()
+    #赛事logoUrl
+    match_logoUrl = scrapy.Field()
+
+class BilibiliGameTeamItem(scrapy.Item):
+    #队伍id
+    team_id = scrapy.Field()
+    #队伍标题
+    team_title = scrapy.Field()
+    #队伍别称
+    team_subTitle = scrapy.Field()
+    #队伍logoUrl
+    team_logoUrl = scrapy.Field()
