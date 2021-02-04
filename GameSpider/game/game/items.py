@@ -37,3 +37,26 @@ class BilibiliGameTeamItem(scrapy.Item):
     team_subTitle = scrapy.Field()
     #队伍logoUrl
     team_logoUrl = scrapy.Field()
+
+class BilibiliGameTimeItem(scrapy.Item):
+    #赛事轮次
+    game_stage = scrapy.Field()
+    game_stage1 = scrapy.Field()
+    game_stage2 = scrapy.Field()
+    #赛事开始和结束时间(时间戳)
+    stime = scrapy.Field()
+    etime = scrapy.Field()
+    #主客场队伍id
+    home_teamID = scrapy.Field()
+    away_teamID = scrapy.Field()
+    #比分
+    home_score = scrapy.Field()
+    away_score = scrapy.Field()
+    #赛季开始/结束时间
+    season_stime = scrapy.Field()
+    season_etime = scrapy.Field()
+    #赛季logoURl
+    season_logo = scrapy.Field()
+    #赛季名称
+    season_title = scrapy.Field()
+    season_subTitle = scrapy.Field()
