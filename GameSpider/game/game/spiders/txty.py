@@ -1,20 +1,14 @@
 import scrapy
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
-from scrapy_redis.spiders import RedisCrawlSpider
 
-class TxtySpider(RedisCrawlSpider):
-    name = 'txdj'
+class TxtySpider(scrapy.Spider):
+    name = 'txty'
     allowed_domains = ['qq.com']
     #start_urls = ['http://qq.com/']
-    redis_key = 'txty'
-    rules = (
-        Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
-    )
 
+    def parse(self, response, **kwargs):
+        pass
+
+    @staticmethod
     def parse_item(self, response):
         item = {}
-        #item['domain_id'] = response.xpath('//input[@id="sid"]/@value').get()
-        #item['name'] = response.xpath('//div[@id="name"]').get()
-        #item['description'] = response.xpath('//div[@id="description"]').get()
         return item
