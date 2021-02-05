@@ -4,7 +4,6 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 import scrapy
 
-
 class BilibiliGameTypeItem(scrapy.Item):
     # #保存图片链接
     # image_urls = scrapy.Field()
@@ -60,3 +59,33 @@ class BilibiliGameTimeItem(scrapy.Item):
     #赛季名称
     season_title = scrapy.Field()
     season_subTitle = scrapy.Field()
+
+class TxtySportTypeItem(scrapy.Field):
+    #体育名称
+    sport_title = scrapy.Field()
+    #具体赛事ID
+    column_ID = scrapy.Field()
+    #赛事图标Url
+    icon = scrapy.Field()
+    #赛事名称
+    name = scrapy.Field()
+    #赛事比赛数量
+    matchNum = scrapy.Field()
+
+class TxtySportTimeItem(scrapy.Field):
+    #左边队伍id
+    leftID = scrapy.Field()
+    #左边队伍名称
+    leftName = scrapy.Field()
+    #左边队伍logoUrl
+    leftBadge = scrapy.Field()
+    #左边队伍比分
+    leftGoal = scrapy.Field()
+    rightID = scrapy.Field()
+    rightName = scrapy.Field()
+    rightBadge = scrapy.Field()
+    rightGoal = scrapy.Field()
+    #NBA常规赛等描述
+    matchDesc = scrapy.Field()
+    #开始时间
+    startTime = scrapy.Field()

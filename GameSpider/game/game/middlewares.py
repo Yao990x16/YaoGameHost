@@ -20,7 +20,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep
 
 class UserAgentDownloadMiddleware(object):
-    def process_request(self, request, spider):
+    @staticmethod
+    def process_request(request, spider):
         ua = UserAgent()
         request.headers['User-Agent'] = ua.random
 

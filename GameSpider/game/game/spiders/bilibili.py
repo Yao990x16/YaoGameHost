@@ -21,7 +21,7 @@ class BilibiliSpider(scrapy.Spider):
         request_code = input('爬取游戏类型/赛事分类/队伍信息输入1;爬取比赛信息输入2;爬取当天实时比分输入3:')
         if request_code == '1':
             yield Request(self.gameType_url, callback=self.parse_gameType)
-        if request_code == '2':
+        elif request_code == '2':
             #爬取原始数据
             stime_str = input('请输入开始日期(xxxx-xx-xx):')
             etime_str = input('请输入结束日期(xxxx-xx-xx):')
@@ -31,7 +31,7 @@ class BilibiliSpider(scrapy.Spider):
                                                    stime=stime_str),
                           callback=self.get_total,
                           meta={'etime': etime_str, 'stime': stime_str})
-        if request_code == "3":
+        elif request_code == '3':
             #%Y四位数年份表示,%m月份,%d月内中的一天
             #获取当天日期,爬取当天比分变化
             localdate = time.strftime('%Y-%m-%d', time.localtime())
@@ -115,7 +115,7 @@ class BilibiliSpider(scrapy.Spider):
                 game_stage = game.get('game_stage')
                 game_stage1 = game.get('game_stage1')
                 game_stage2 = game.get('game_stage2')
-                #赛事开始和结束时间(时间戳)
+                #赛事开始和结束时间(时间戳,秒级别)
                 sTime = game.get('stime')
                 #print('比赛开始时间的时间戳格式:', sTime, type(sTime))
                 eTime = game.get('etime')
