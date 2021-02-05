@@ -1,12 +1,8 @@
 from urllib.parse import urljoin
-
 import scrapy
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
-from scrapy_redis.spiders import RedisCrawlSpider
 from scrapy import Request
 import json
-import time,datetime
+import time
 from ..items import BilibiliGameTypeItem
 from ..items import BilibiliGameMatchItem
 from ..items import BilibiliGameTeamItem
@@ -15,12 +11,6 @@ from ..items import BilibiliGameTimeItem
 class BilibiliSpider(scrapy.Spider):
     name = 'bilibili'
     allowed_domains = ['bilibili.com']
-    #start_urls = ['https://www.bilibili.com/v/game/match/schedule']
-    #redis_key = 'bilibili'
-    # rules = (
-    #     Rule(LinkExtractor(allow=r'.+'),
-    #          callback='parse_item', follow=False),
-    # )
     #游戏类型
     gameType_url = 'https://api.bilibili.com/x/esports/matchs/filter?mid=0&gid=0&tid=0'
     #比赛日期
@@ -45,7 +35,7 @@ class BilibiliSpider(scrapy.Spider):
             #%Y四位数年份表示,%m月份,%d月内中的一天
             #获取当天日期,爬取当天比分变化
             localdate = time.strftime('%Y-%m-%d', time.localtime())
-            print('今天的日期:', localdate, type(localdate))
+            print('今天的日期:', localdate)
             yield Request(self.gameTime_url.format(pageNum=1,
                                                    pageSize=10,
                                                    etime=localdate,
@@ -54,6 +44,9 @@ class BilibiliSpider(scrapy.Spider):
                           meta={'etime': localdate, 'stime': localdate})
         else:
             print('请输入1或2或3')
+
+    def parse(self, response, **kwargs):
+        pass
 
     @staticmethod
     def parse_gameType(response):
@@ -124,7 +117,7 @@ class BilibiliSpider(scrapy.Spider):
                 game_stage2 = game.get('game_stage2')
                 #赛事开始和结束时间(时间戳)
                 sTime = game.get('stime')
-                print('比赛开始时间的时间戳格式:', sTime, type(sTime))
+                #print('比赛开始时间的时间戳格式:', sTime, type(sTime))
                 eTime = game.get('etime')
                 #主客场队伍id
                 home_teamID = game.get('home_id')
