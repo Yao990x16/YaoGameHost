@@ -1,0 +1,24 @@
+#  devtools
+debug: true
+spring:
+  devtools:
+    restart:
+      enabled: true
+  freemarker:
+    cache: false
+
+#jdp
+  datasource:
+    url: jdbc:mysql://212.64.83.246:3306/2021bishe_yao?useUnicode=true&characterEncoding=utf8
+    username: 2021bishe_yao
+    password: 2017013010
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8181
