@@ -65,22 +65,22 @@ class TxtySpider(scrapy.Spider):
             os.remove(filePath)
         if result.get('data'):
             sports = result['data']
-            for sport in sports:
-                sport_title = sport.get('title')
-                columns = sport.get('columns')
-                for column in columns:
-                    column_ID = column.get('columnId')
-                    icon = column.get('icon')
-                    name = column.get('name')
-                    matchNum = column.get('matchNum')
-                    fd = open(filePath, 'a')
-                    fd.write(column_ID+'\n')
-                    item = TxtySportTypeItem(sport_title=sport_title,
-                                             column_ID=column_ID,
-                                             icon=icon,
-                                             name=name,
-                                             matchNum=matchNum)
-                    yield item
+            with open(filePath, 'a') as fd:
+                for sport in sports:
+                    sport_title = sport.get('title')
+                    columns = sport.get('columns')
+                    for column in columns:
+                        column_ID = column.get('columnId')
+                        icon = column.get('icon')
+                        name = column.get('name')
+                        matchNum = column.get('matchNum')
+                        fd.write(column_ID+'\n')
+                        item = TxtySportTypeItem(sport_title=sport_title,
+                                                 column_ID=column_ID,
+                                                 icon=icon,
+                                                 name=name,
+                                                 matchNum=matchNum)
+                        yield item
                 fd.close()
 
     @staticmethod
