@@ -35,24 +35,24 @@ class TxtySpider(scrapy.Spider):
             #爬取原始数据
             stime_str = input('请输入开始日期(xxxx-xx-xx):')
             etime_str = input('请输入结束日期(xxxx-xx-xx):')
-            file = open(currentPath+"\\columnID.txt", 'r+')
-            for columnID in file:
-                yield Request(self.sports_timeUrl.format(today=localdate,
-                                                         startTime=stime_str,
-                                                         endTime=etime_str,
-                                                         columnID=columnID),
-                              callback=self.parse_sportsTime)
+            with open(currentPath+"\\columnID.txt", 'r+') as file:
+                for columnID in file:
+                    yield Request(self.sports_timeUrl.format(today=localdate,
+                                                             startTime=stime_str,
+                                                             endTime=etime_str,
+                                                             columnID=columnID),
+                                  callback=self.parse_sportsTime)
         elif request_code == '3':
             #%Y四位数年份表示,%m月份,%d月内中的一天
             #获取当天日期,爬取当天比分变化
             print('今天的日期:', localdate)
-            file = open(currentPath+"\\columnID.txt", 'r+')
-            for columnID in file:
-                yield Request(self.sports_timeUrl.format(today=localdate,
-                                                         startTime=localdate,
-                                                         endTime=localdate,
-                                                         columnID=columnID),
-                              callback=self.parse_sportsTime)
+            with open(currentPath+"\\columnID.txt", 'r+') as file:
+                for columnID in file:
+                    yield Request(self.sports_timeUrl.format(today=localdate,
+                                                             startTime=localdate,
+                                                             endTime=localdate,
+                                                             columnID=columnID),
+                                  callback=self.parse_sportsTime)
         else:
             print('请输入1或2或3')
 
