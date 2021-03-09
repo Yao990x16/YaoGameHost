@@ -14,11 +14,13 @@ spring:
     password: 2017013010
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    #控制台显示建表语句
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     hibernate:
+      #没有表新建，有表更新操作
       ddl-auto: update
 server:
   port: 8181
