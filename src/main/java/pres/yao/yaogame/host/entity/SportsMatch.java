@@ -7,14 +7,14 @@ import java.io.Serializable;
 
 /**
  * @Author Fahaxiki
- * @ClassName User
+ * @ClassName SportsMatch
  * @Description TODO
- * @Date 2021/3/9
+ * @Date 2021/3/10
  */
 @Data
 @Entity
-@Table(name = "user")
-public class User implements Serializable {
+@Table(name = "sports_match")
+public class SportsMatch implements Serializable {
 	/**
 	 * @Description: 序列化版本号
 	 */
@@ -26,21 +26,20 @@ public class User implements Serializable {
 	private Integer id;
 
 	/**
-	 * @Description: 用户名
+	 * @Description: 联赛id
 	 */
-	@Id
-	@Column(name = "username",nullable = false,unique = true)
-	private String username;
+	@Column(name = "match_id")
+	private Integer matchId;
 
 	/**
-	 * @Description: 密码
+	 * @Description: 联赛名称
 	 */
-	@Column(name = "password",nullable = false)
-	private String password;
+	@Column(name = "match_name")
+	private String matchName;
 
 	/**
-	 * @Description: 邮箱
+	 * @Description: 联赛LogoURL
 	 */
-	@Column(name = "email",nullable = false)
-	private String email;
+	@Column(name = "match_logo_url")
+	private String matchLogoUrl;
 }

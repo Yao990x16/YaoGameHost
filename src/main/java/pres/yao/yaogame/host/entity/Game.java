@@ -7,15 +7,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @author Yao
- * @ClassName Team
+ * @Author Fahaxiki
+ * @ClassName Game
  * @Description TODO
- * @Date 2021/3/9 12:25
+ * @Date 2021/3/10
  */
 @Data
 @Entity
-@Table(name = "team")
-public class Team implements Serializable {
+@Table(name = "game")
+public class Game implements Serializable {
 	/**
 	 * @Description: 序列化版本号
 	 */
@@ -27,12 +27,15 @@ public class Team implements Serializable {
 	private Integer id;
 	
 	/**
-	 * @Description: 队伍名称
+	 * @Description: 游戏/运动名称
 	 */
-	@Column(name = "team_name")
-	private String teamName;
-
-	@Column(name = "team_type")
+	@Column(name = "game_name")
+	private String gameName;
+	
+	/**
+	 * @Description: 类型
+	 */
+	@Column(name = "game_type")
 	@Enumerated(EnumType.STRING)
-	private Type teamType;
+	private Type gameType;
 }

@@ -1,21 +1,20 @@
 package pres.yao.yaogame.host.entity;
 
 import lombok.Data;
-import pres.yao.yaogame.host.entity.meiju.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @author Yao
- * @ClassName Team
+ * @Author Fahaxiki
+ * @ClassName SportsGame
  * @Description TODO
- * @Date 2021/3/9 12:25
+ * @Date 2021/3/10
  */
 @Data
 @Entity
-@Table(name = "team")
-public class Team implements Serializable {
+@Table(name = "sports_game")
+public class SportsGame implements Serializable {
 	/**
 	 * @Description: 序列化版本号
 	 */
@@ -27,12 +26,8 @@ public class Team implements Serializable {
 	private Integer id;
 	
 	/**
-	 * @Description: 队伍名称
+	 * @Description: 体育项目种类名称
 	 */
-	@Column(name = "team_name")
-	private String teamName;
-
-	@Column(name = "team_type")
-	@Enumerated(EnumType.STRING)
-	private Type teamType;
+	@Column(name = "game_name")
+	private String gameName;
 }
