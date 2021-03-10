@@ -24,3 +24,12 @@ spring:
       ddl-auto: update
 server:
   port: 8181
+
+#日志等级
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure:
+            logging: info
