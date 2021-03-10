@@ -13,7 +13,4 @@ import pres.yao.yaogame.host.service.UserService;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
-	@Autowired
-	private UserRepository userRepository;
 }

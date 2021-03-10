@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Table(name = "match")
+@Table(name = "league_match")
 public class Match implements Serializable {
 	/**
 	 * @Description: 序列化版本号
