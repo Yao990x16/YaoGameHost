@@ -38,7 +38,14 @@ public class UserController {
 	public User getByNameAndPwd(String name,String password){
 		return userService.findByNameAndPwd(name,password);
 	}
-
+	
+	/**
+	 * @MethodName: saveUser
+	 * @Param: [name, password, email]
+	 * @ParamType: [java.lang.String, java.lang.String, java.lang.String]			
+	 * @return: void
+	 * @Description: 用户注册
+	 */
 	@RequestMapping("/saveUser")
 	public void saveUser(String name,String password,String email){
 		User user = new User();
@@ -46,5 +53,15 @@ public class UserController {
 		user.setPassword(password);
 		user.setEmail(email);
 		userService.register(user);
+	}
+
+	@RequestMapping("/login")
+	public String login(String username, String password){
+		User user = userService.findByNameAndPwd(username, password);
+		if(user != null){
+			return "登录成功";
+		}else{
+			return "请检查用户名或者密码";
+		}
 	}
 }
