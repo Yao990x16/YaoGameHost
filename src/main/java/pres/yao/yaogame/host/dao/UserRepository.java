@@ -12,7 +12,6 @@ import java.util.Optional;
  * @Description TODO
  * @Date 2021/3/10
  */
-@Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
 	User findByUsername(String username);
 

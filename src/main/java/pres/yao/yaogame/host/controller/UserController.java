@@ -1,16 +1,11 @@
 package pres.yao.yaogame.host.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pres.yao.yaogame.host.entity.User;
 import pres.yao.yaogame.host.service.UserService;
-import pres.yao.yaogame.host.service.impl.UserServiceImpl;
-
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author Fahaxiki
@@ -21,8 +16,13 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-	@Autowired
+	@Resource
 	private UserService userService;
+
+	@RequestMapping("/getAll")
+	public List<User> getAll(){
+		return userService.findAll();
+	}
 
 	@RequestMapping("/getByName")
 	public User getByName(String userName) {
@@ -41,6 +41,10 @@ public class UserController {
 
 	@RequestMapping("/saveUser")
 	public void saveUser(String name,String password,String email){
-		userService.register(name,password,email);
+		User user = new User();
+		user.setUsername(name);
+		user.setPassword(password);
+		user.setEmail(email);
+		userService.register(user);
 	}
 }

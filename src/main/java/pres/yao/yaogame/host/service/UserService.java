@@ -51,10 +51,10 @@ public interface UserService {
 
 	/**
 	 * @MethodName: register
-	 * @Param: [user]
-	 * @ParamType: [pres.yao.yaogame.host.entity.User]
+	 * @Param: [name, password, email]
+	 * @ParamType: [java.lang.String, java.lang.String, java.lang.String]			
 	 * @return: void
-	 * @Description: 注册,插入到数据库
+	 * @Description: 注册用户
 	 */
-	public void register(String name, String password,String email);
+	public void register(User user);
 }

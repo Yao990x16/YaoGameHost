@@ -82,11 +82,7 @@ public class UserServiceImpl implements UserService {
 	 * @Description: 注册, 插入到数据库
 	 */
 	@Override
-	public void register(String name,String password,String email) {
-		User user = new User();
-		user.setUsername(name);
-		user.setPassword(password);
-		user.setEmail(email);
+	public void register(User user) {
 		userDao.save(user);
 	}
 	
