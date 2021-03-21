@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pres.yao.yaogame.host.entity.User;
 import pres.yao.yaogame.host.service.UserService;
 import javax.annotation.Resource;
+import javax.security.auth.login.LoginException;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,21 +50,40 @@ public class UserController {
 	 * @Description: 用户注册
 	 */
 	@RequestMapping("/saveUser")
-	public void saveUser(String name,String password,String email){
-		User user = new User();
-		user.setUsername(name);
-		user.setPassword(password);
-		user.setEmail(email);
-		userService.register(user);
+	public HashMap<String, String> saveUser(String name,String password,String email) {
+		HashMap<String,String> hashMap = new HashMap<>(16);
+		try {
+			User user = new User();
+			user.setUsername(name);
+			user.setPassword(password);
+			user.setEmail(email);
+			userService.register(user);
+			hashMap.put("msg","ok");
+		}catch(Exception e){
+			e.printStackTrace();
+			hashMap.put("msg","error");
+		}
+		return hashMap;
 	}
-
+	
+	/**
+	 * @MethodName: login
+	 * @Param: [username, password]
+	 * @ParamType: [java.lang.String, java.lang.String]			
+	 * @return: java.util.HashMap<java.lang.String,java.lang.String>
+	 * @Description: 用户登录
+	 */
 	@RequestMapping("/login")
-	public String login(String username, String password){
+	public HashMap<String, String> login(String username, String password)throws IOException {
 		User user = userService.findByNameAndPwd(username, password);
 		if(user != null){
-			return "登录成功";
+			return new HashMap<>(16){{
+				put("msg","ok");
+			}};
 		}else{
-			return "请检查用户名或者密码";
+			return new HashMap<>(16){{
+				put("msg","error");
+			}};
 		}
 	}
 }
