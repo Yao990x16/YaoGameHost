@@ -89,7 +89,14 @@ DOWNLOADER_MIDDLEWARES = {
 # EXTENSIONS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 # }
-
+MYSQL_CONFIG = {
+	'DRIVER': 'pymysql',
+	'HOST': '212.64.83.246',
+	'PORT': 3306,
+	'USER': '2021bishe_yao',
+	'PASSWORD': '2017013010',
+	'DATABASE': '2021bishe_yao'
+}
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {

@@ -22,16 +22,18 @@ class TxtySpider(scrapy.Spider):
     global currentPath
     # noinspection PyRedeclaration
     currentPath = os.path.abspath(os.path.dirname(__file__))
+    request_code = '0'
 
-    def parse(self, response, **kwargs):
-        pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if kwargs.get("request_code") is not None:
+            self.request_code = kwargs.get("request_code")
 
     def start_requests(self):
         localdate = time.strftime('%Y-%m-%d', time.localtime())
-        request_code = input('爬取体育类型/赛事分类/队伍信息输入1;爬取比赛信息输入2;爬取当天实时比分输入3: ')
-        if request_code == '1':
+        if self.request_code == '1':
             yield Request(self.sports_typeUrl, callback=self.parse_sportsType)
-        elif request_code == '2':
+        elif self.request_code == '2':
             #爬取原始数据
             stime_str = input('请输入开始日期(xxxx-xx-xx):')
             etime_str = input('请输入结束日期(xxxx-xx-xx):')
@@ -42,7 +44,7 @@ class TxtySpider(scrapy.Spider):
                                                              endTime=etime_str,
                                                              columnID=columnID),
                                   callback=self.parse_sportsTime)
-        elif request_code == '3':
+        elif self.request_code == '3':
             #%Y四位数年份表示,%m月份,%d月内中的一天
             #获取当天日期,爬取当天比分变化
             print('今天的日期:', localdate)
@@ -53,6 +55,8 @@ class TxtySpider(scrapy.Spider):
                                                              endTime=localdate,
                                                              columnID=columnID),
                                   callback=self.parse_sportsTime)
+        elif self.request_code == '0':
+            self.request_code = input('爬取体育类型/赛事分类/队伍信息输入1;爬取比赛信息输入2;爬取当天实时比分输入3: ')
         else:
             print('请输入1或2或3')
 
