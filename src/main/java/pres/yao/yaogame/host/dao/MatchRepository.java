@@ -2,6 +2,10 @@ package pres.yao.yaogame.host.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import pres.yao.yaogame.host.entity.Match;
+import pres.yao.yaogame.host.entity.meiju.Type;
+
+import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * @Author Fahaxiki
@@ -10,4 +14,6 @@ import pres.yao.yaogame.host.entity.Match;
  * @Date 2021/3/10
  */
 public interface MatchRepository extends JpaRepository<Match,Integer> {
+	Match findByMatchName(String matchName);
+	List<Match> findByMatchType(String matchType);
 }

@@ -3,7 +3,6 @@ import scrapy
 from scrapy import Request
 import json
 import time
-import sys
 from ..items import BilibiliGameTypeItem
 from ..items import BilibiliGameMatchItem
 from ..items import BilibiliGameTeamItem
@@ -68,6 +67,7 @@ class BilibiliSpider(scrapy.Spider):
                 item = BilibiliGameTypeItem(game_title=game_title,
                                             game_subTitle=game_subTitle,
                                             game_logoUrl=game_logoUrl)
+                item['item_name'] = 'bilibili_gameType'
                 yield item
 
         if result.get('data').get('matchs'):
@@ -81,6 +81,7 @@ class BilibiliSpider(scrapy.Spider):
                                              match_title=match_title,
                                              match_subTitle=match_subTitle,
                                              match_logoUrl=match_logoUrl)
+                item['item_name'] = 'bilibili_gameMatch'
                 yield item
 
         if result.get('data').get('teams'):
@@ -94,6 +95,7 @@ class BilibiliSpider(scrapy.Spider):
                                             team_title=team_title,
                                             team_subTitle=team_subTitle,
                                             team_logoUrl=team_logoUrl)
+                item['item_name'] = 'bilibili_gameTeam'
                 yield item
 
     def get_total(self, response):
@@ -158,4 +160,5 @@ class BilibiliSpider(scrapy.Spider):
                                             season_logo=season_logo,
                                             season_title=season_title,
                                             season_subTitle=season_subTitle)
+                item['item_name'] = 'bilibili_gameTime'
                 yield item

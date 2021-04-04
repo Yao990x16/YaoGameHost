@@ -10,4 +10,5 @@ import pres.yao.yaogame.host.entity.SportsGame;
  * @Date 2021/3/10
  */
 public interface SportsGameRepository extends JpaRepository<SportsGame,Integer> {
+	SportsGame findByGameName(String gameName);
 }

@@ -7,11 +7,28 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import pymysql
+from twisted.enterprise import adbapi
 
-class GamePipeline:
-    def process_item(self, item, spider):
-        return item
+class MySQLPipeline:
+    def __init__(self, mysql_config):
+        self.dbpool = adbapi.ConnectionPool(
+            mysql_config['DRIVER'],
+            host=mysql_config['HOST'],
+            port=mysql_config['PORT'],
+            user=mysql_config['USER'],
+            password=mysql_config['PASSWORD'],
+            db=mysql_config['DATABASE'],
+            charset='utf8'
+        )
 
     @classmethod
     def from_crawler(cls, crawler):
-        pass
+        #重写了此方法,以后创建对象的时候,就会调用这个方法来获取pipeline对象
+        mysql_config = crawler.settings['MYSQL_CONFIG']
+        return cls(mysql_config)
+
+    def process_item(self, item, spider):
+        self.dbpool.runInteraction()
+        return item
+
+

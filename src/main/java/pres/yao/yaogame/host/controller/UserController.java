@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pres.yao.yaogame.host.entity.User;
 import pres.yao.yaogame.host.service.UserService;
 import javax.annotation.Resource;
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -52,16 +51,22 @@ public class UserController {
 	@RequestMapping("/saveUser")
 	public HashMap<String, String> saveUser(String name,String password,String email) {
 		HashMap<String,String> hashMap = new HashMap<>(16);
-		try {
-			User user = new User();
-			user.setUsername(name);
-			user.setPassword(password);
-			user.setEmail(email);
-			userService.register(user);
-			hashMap.put("msg","ok");
-		}catch(Exception e){
-			e.printStackTrace();
-			hashMap.put("msg","error");
+		User oldUser = userService.findByName(name);
+		if(oldUser==null){
+			try {
+				User user = new User();
+				user.setUsername(name);
+				user.setPassword(password);
+				user.setEmail(email);
+				userService.register(user);
+				hashMap.put("msg","ok");
+				hashMap.put("user",user.toString());
+			}catch(Exception e){
+				e.printStackTrace();
+				hashMap.put("msg","error");
+			}
+		}else{
+			hashMap.put("msg","用户名已存在");
 		}
 		return hashMap;
 	}
@@ -85,5 +90,18 @@ public class UserController {
 				put("msg","error");
 			}};
 		}
+	}
+
+	@RequestMapping("/deleteUser")
+	public HashMap<String,String> deleteByUserName(String userName) {
+		HashMap<String,String> hashMap = new HashMap<>(16);
+		User user = userService.findByName(userName);
+		if(user != null){
+			userService.deleteByUserName(userName);
+			hashMap.put("msg",user.getUsername()+"删除成功");
+		}else{
+			hashMap.put("msg","删除失败,没有名称为 "+userName+" 的用户");
+		}
+		return hashMap;
 	}
 }

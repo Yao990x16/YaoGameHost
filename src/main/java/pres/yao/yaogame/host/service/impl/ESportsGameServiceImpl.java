@@ -1,7 +1,11 @@
 package pres.yao.yaogame.host.service.impl;
 
 import org.springframework.stereotype.Service;
+import pres.yao.yaogame.host.dao.ESportsGameRepository;
+import pres.yao.yaogame.host.entity.ESportsGame;
 import pres.yao.yaogame.host.service.ESportsGameService;
+
+import javax.annotation.Resource;
 
 /**
  * @Author Fahaxiki
@@ -11,4 +15,45 @@ import pres.yao.yaogame.host.service.ESportsGameService;
  */
 @Service
 public class ESportsGameServiceImpl implements ESportsGameService {
+	@Resource
+	private ESportsGameRepository eSportsGameDao;
+
+	/**
+	 * @param gameLogoUrl
+	 * @MethodName: findByGameLogoUrl
+	 * @Param: [gameLogoUrl]
+	 * @ParamType: [java.lang.String]
+	 * @return: pres.yao.yaogame.host.entity.ESportsGame
+	 * @Description: 电竞比赛种类logo
+	 */
+	@Override
+	public ESportsGame findByGameLogoUrl(String gameLogoUrl) {
+		return eSportsGameDao.findByGameLogoUrl(gameLogoUrl);
+	}
+
+	/**
+	 * @param gameName
+	 * @MethodName: findByGameName
+	 * @Param: [gameName]
+	 * @ParamType: [java.lang.String]
+	 * @return: pres.yao.yaogame.host.entity.ESportsGame
+	 * @Description: 电竞比赛种类名称
+	 */
+	@Override
+	public ESportsGame findByGameName(String gameName) {
+		return eSportsGameDao.findByGameName(gameName);
+	}
+
+	/**
+	 * @param gameSubName
+	 * @MethodName: findByGameSubName
+	 * @Param: [gameSubName]
+	 * @ParamType: [java.lang.String]
+	 * @return: pres.yao.yaogame.host.entity.ESportsGame
+	 * @Description: 电竞比赛种类别称
+	 */
+	@Override
+	public ESportsGame findByGameSubName(String gameSubName) {
+		return eSportsGameDao.findByGameSubName(gameSubName);
+	}
 }

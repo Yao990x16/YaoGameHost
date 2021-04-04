@@ -10,4 +10,6 @@ import pres.yao.yaogame.host.entity.Subscription;
  * @Date 2021/3/10
  */
 public interface SubscriptionRepository extends JpaRepository<Subscription,Integer> {
+	Subscription findByCompetitionId(int competitionId);
+	Subscription findByUserName(String userName);
 }

@@ -1,7 +1,6 @@
 import os
 import time
 import json
-from typing import TextIO
 
 from scrapy import Request
 import scrapy
@@ -60,6 +59,9 @@ class TxtySpider(scrapy.Spider):
         else:
             print('请输入1或2或3')
 
+    def parse(self, response, **kwargs):
+        pass
+
     @staticmethod
     def parse_sportsType(response):
         result = json.loads(response.text)
@@ -84,6 +86,7 @@ class TxtySpider(scrapy.Spider):
                                                  icon=icon,
                                                  name=name,
                                                  matchNum=matchNum)
+                        item['item_name'] = 'txty_sportType'
                         yield item
                 fd.close()
 
@@ -115,4 +118,5 @@ class TxtySpider(scrapy.Spider):
                                              rightGoal=rightGoal,
                                              matchDesc=matchDesc,
                                              startTime=startTime)
+                    item['item_name'] = 'txty_sportTime'
                     yield item

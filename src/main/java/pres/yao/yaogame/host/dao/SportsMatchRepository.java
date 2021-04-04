@@ -10,4 +10,7 @@ import pres.yao.yaogame.host.entity.SportsMatch;
  * @Date 2021/3/10
  */
 public interface SportsMatchRepository extends JpaRepository<SportsMatch,Integer> {
+	SportsMatch findByMatchId(int matchId);
+	SportsMatch findByMatchLogoUrl(String matchLogoUrl);
+	SportsMatch findByMatchName(String matchName);
 }

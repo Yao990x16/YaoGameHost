@@ -85,5 +85,17 @@ public class UserServiceImpl implements UserService {
 	public void register(User user) {
 		userDao.save(user);
 	}
-	
+
+	/**
+	 * @param userName
+	 * @MethodName: deleteByUserName
+	 * @Param: [userName]
+	 * @ParamType: [java.lang.String]
+	 * @return: void
+	 * @Description: 根据用户名删除
+	 */
+	@Override
+	public void deleteByUserName(String userName) {
+		userDao.deleteByUsername(userName);
+	}
 }

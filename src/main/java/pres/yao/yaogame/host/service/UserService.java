@@ -1,6 +1,5 @@
 package pres.yao.yaogame.host.service;
 
-import org.springframework.stereotype.Service;
 import pres.yao.yaogame.host.entity.User;
 
 import java.util.List;
@@ -57,4 +56,13 @@ public interface UserService {
 	 * @Description: 注册用户
 	 */
 	public void register(User user);
+	
+	/**
+	 * @MethodName: deleteByUserName
+	 * @Param: [userName]
+	 * @ParamType: [java.lang.String]			
+	 * @return: void
+	 * @Description: 根据用户名删除
+	 */
+	public void deleteByUserName(String userName);
 }
