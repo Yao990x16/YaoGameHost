@@ -9,7 +9,8 @@ class BilibiliGameTypeItem(scrapy.Item):
     # image_urls = scrapy.Field()
     # #下载完成后形成image对象保存到这上面
     # images = scrapy.Field()
-
+    # Item名称
+    item_name = scrapy.Field()
     #游戏名称
     game_title = scrapy.Field()
     #游戏别称
@@ -18,6 +19,8 @@ class BilibiliGameTypeItem(scrapy.Item):
     game_logoUrl = scrapy.Field()
 
 class BilibiliGameMatchItem(scrapy.Item):
+    # Item名称
+    item_name = scrapy.Field()
     #赛事id
     match_id = scrapy.Field()
     #赛事标题
@@ -28,6 +31,8 @@ class BilibiliGameMatchItem(scrapy.Item):
     match_logoUrl = scrapy.Field()
 
 class BilibiliGameTeamItem(scrapy.Item):
+    # Item名称
+    item_name = scrapy.Field()
     #队伍id
     team_id = scrapy.Field()
     #队伍标题
@@ -38,6 +43,8 @@ class BilibiliGameTeamItem(scrapy.Item):
     team_logoUrl = scrapy.Field()
 
 class BilibiliGameTimeItem(scrapy.Item):
+    # Item名称
+    item_name = scrapy.Field()
     #赛事轮次
     game_stage = scrapy.Field()
     game_stage1 = scrapy.Field()
@@ -61,6 +68,8 @@ class BilibiliGameTimeItem(scrapy.Item):
     season_subTitle = scrapy.Field()
 
 class TxtySportTypeItem(scrapy.Field):
+    # Item名称
+    item_name = scrapy.Field()
     #体育名称
     sport_title = scrapy.Field()
     #具体赛事ID
@@ -73,6 +82,8 @@ class TxtySportTypeItem(scrapy.Field):
     matchNum = scrapy.Field()
 
 class TxtySportTimeItem(scrapy.Field):
+    # Item名称
+    item_name = scrapy.Field()
     #左边队伍id
     leftID = scrapy.Field()
     #左边队伍名称
