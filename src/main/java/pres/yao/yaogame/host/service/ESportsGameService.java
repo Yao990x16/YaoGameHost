@@ -2,6 +2,8 @@ package pres.yao.yaogame.host.service;
 
 import pres.yao.yaogame.host.entity.ESportsGame;
 
+import java.util.List;
+
 /**
  * @Author Fahaxiki
  * @ClassName ESportsGameService
@@ -35,4 +37,13 @@ public interface ESportsGameService {
 	 * @Description: 电竞比赛种类别称
 	 */
 	public ESportsGame findByGameSubName(String gameSubName);
+
+	/**
+	 * @MethodName: getGameNames
+	 * @Param: []
+	 * @ParamType: []
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.ESportsGame>
+	 * @Description: 获取所有电竞比赛项目名称
+	 */
+	public List<ESportsGame> getAllGames();
 }

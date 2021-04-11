@@ -6,6 +6,7 @@ import pres.yao.yaogame.host.entity.SportsGame;
 import pres.yao.yaogame.host.service.SportsGameService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author Fahaxiki
@@ -29,5 +30,17 @@ public class SportsGameServiceImpl implements SportsGameService {
 	@Override
 	public SportsGame findByGameName(String gameName) {
 		return sportsGameDao.findByGameName(gameName);
+	}
+
+	/**
+	 * @MethodName: getGameNames
+	 * @Param: []
+	 * @ParamType: []
+	 * @return: java.util.List<java.lang.String>
+	 * @Description: 获取所有比赛名称, 比如篮球/足球/网球
+	 */
+	@Override
+	public List<SportsGame> getAllGames() {
+		return sportsGameDao.findAll();
 	}
 }

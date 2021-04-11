@@ -6,6 +6,7 @@ import pres.yao.yaogame.host.entity.ESportsGame;
 import pres.yao.yaogame.host.service.ESportsGameService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author Fahaxiki
@@ -55,5 +56,17 @@ public class ESportsGameServiceImpl implements ESportsGameService {
 	@Override
 	public ESportsGame findByGameSubName(String gameSubName) {
 		return eSportsGameDao.findByGameSubName(gameSubName);
+	}
+
+	/**
+	 * @MethodName: getGameNames
+	 * @Param: []
+	 * @ParamType: []
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.ESportsGame>
+	 * @Description: 获取所有电竞比赛项目名称
+	 */
+	@Override
+	public List<ESportsGame> getAllGames() {
+		return eSportsGameDao.findAll();
 	}
 }

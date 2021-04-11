@@ -15,8 +15,7 @@ import java.util.List;
  * @Date 2021/3/10
  */
 @RestController
-@RequestMapping("/match")
-public class MatchController {
+@RequestMapping("/match")                                                                                                                    public class MatchController {
 	@Resource
 	private MatchService matchService;
 

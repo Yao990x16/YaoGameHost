@@ -1,6 +1,5 @@
 package pres.yao.yaogame.host.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pres.yao.yaogame.host.dao.UserRepository;
 import pres.yao.yaogame.host.entity.User;
@@ -8,6 +7,7 @@ import pres.yao.yaogame.host.service.UserService;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author Fahaxiki
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void register(User user) {
-		userDao.save(user);
+		userDao.saveAndFlush(user);
 	}
 
 	/**
@@ -97,5 +97,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteByUserName(String userName) {
 		userDao.deleteByUsername(userName);
+	}
+
+	@Override
+	public Optional<User> findByUserId(int userId) {
+		return userDao.findById(userId);
 	}
 }

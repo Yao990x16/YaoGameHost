@@ -29,4 +29,13 @@ public interface GameService {
 	 * @Description: 游戏/比赛类型
 	 */
 	public List<Game> findByGameType(String gameType);
+	
+	/**
+	 * @MethodName: getAllGames
+	 * @Param: []
+	 * @ParamType: []			
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.Game>
+	 * @Description: 获取所有比赛
+	 */
+	public List<Game> getAllGames();
 }

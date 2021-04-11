@@ -3,6 +3,7 @@ package pres.yao.yaogame.host.service;
 import pres.yao.yaogame.host.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author Fahaxiki
@@ -65,4 +66,7 @@ public interface UserService {
 	 * @Description: 根据用户名删除
 	 */
 	public void deleteByUserName(String userName);
+
+
+	public Optional<User> findByUserId(int userId);
 }

@@ -29,4 +29,9 @@ public class GameController {
 	public List<Game> getByGameType(String gameType) {
 		return gameService.findByGameType(gameType);
 	}
+
+	@RequestMapping("/getAllGames")
+	public List<Game> getAllGames(){
+		return gameService.getAllGames();
+	}
 }

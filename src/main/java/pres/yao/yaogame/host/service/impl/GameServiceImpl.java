@@ -45,4 +45,16 @@ public class GameServiceImpl implements GameService {
 	public List<Game> findByGameType(String gameType) {
 		return gameDao.findByGameType(gameType);
 	}
+
+	/**
+	 * @MethodName: getAllGames
+	 * @Param: []
+	 * @ParamType: []
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.Game>
+	 * @Description: 获取所有比赛
+	 */
+	@Override
+	public List<Game> getAllGames() {
+		return gameDao.findAll();
+	}
 }
