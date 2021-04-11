@@ -3,6 +3,8 @@ package pres.yao.yaogame.host.service;
 import pres.yao.yaogame.host.entity.Competition;
 import pres.yao.yaogame.host.entity.meiju.Type;
 
+import java.util.List;
+
 /**
  * @Author Fahaxiki
  * @ClassName CompetitionService
@@ -11,82 +13,38 @@ import pres.yao.yaogame.host.entity.meiju.Type;
  */
 public interface CompetitionService {
 	/**
-	 * @MethodName: findByCompetitionType
+	 * @MethodName: getByCompetitionType
 	 * @Param: [competitionType]
-	 * @ParamType: [pres.yao.yaogame.host.entity.meiju.Type]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 比赛类型,电竞/传统体育
+	 * @ParamType: [java.lang.String]
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.Competition>
+	 * @Description: 根据赛程类型,电竞/传统体育来获得赛程信息
 	 */
-	public Competition findByCompetitionType(Type competitionType);
-	
+	List<Competition> getByCompetitionType(String competitionType);
+
 	/**
-	 * @MethodName: findByGameStage
+	 * @MethodName: getByGameStage
 	 * @Param: [gameStage]
-	 * @ParamType: [java.lang.String]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 比赛状态,第几轮
+	 * @ParamType: [java.lang.String]
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.Competition>
+	 * @Description: 根据比赛轮次获取赛程信息
 	 */
-	public Competition findByGameStage(String gameStage);
-	
+	List<Competition> getByGameStage(String gameStage);
+
 	/**
-	 * @MethodName: findByLeftId
-	 * @Param: [leftId]
-	 * @ParamType: [int]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 左边队伍Id
-	 */
-	public Competition findByLeftId(int leftId);
-	/**
-	 * @MethodName: findByLeftName
-	 * @Param: [leftName]
-	 * @ParamType: [java.lang.String]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 左边队伍名称
-	 */
-	public Competition findByLeftName(String leftName);
-	
-	/**
-	 * @MethodName: findByLeftScore
-	 * @Param: [leftScore]
-	 * @ParamType: [int]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 左边队伍比分
-	 */
-	public Competition findByLeftScore(int leftScore);
-	
-	/**
-	 * @MethodName: findByRightId
-	 * @Param: [rightId]
-	 * @ParamType: [int]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 右边队伍Id
-	 */
-	public Competition findByRightId(int rightId);
-	
-	/**
-	 * @MethodName: findByRightName
-	 * @Param: [rightName]
-	 * @ParamType: [java.lang.String]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 右边队伍名称
-	 */
-	public Competition findByRightName(String rightName);
-	
-	/**
-	 * @MethodName: findByRightScore
-	 * @Param: [rightScore]
-	 * @ParamType: [int]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 右边队伍分数
-	 */
-	public Competition findByRightScore(int rightScore);
-	
-	/**
-	 * @MethodName: findByStartTime
+	 * @MethodName: getByStartTime
 	 * @Param: [startTime]
-	 * @ParamType: [java.lang.String]			
-	 * @return: pres.yao.yaogame.host.entity.Competition
-	 * @Description: 比赛开始时间
+	 * @ParamType: [java.lang.String]
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.Competition>
+	 * @Description: 根据开始时间获得赛程信息
 	 */
-	public Competition findByStartTime(String startTime);
+	List<Competition> getByStartTime(String startTime);
+
+	/**
+	 * @MethodName: getByCompTypeAndSTime
+	 * @Param: [compType, stime]
+	 * @ParamType: [java.lang.String, java.lang.String]
+	 * @return: java.util.List<pres.yao.yaogame.host.entity.Competition>
+	 * @Description: 根据赛程类型和开始时间获取赛程信息
+	 */
+	List<Competition> getByCompTypeAndSTime(String compType,String sTime);
 }
