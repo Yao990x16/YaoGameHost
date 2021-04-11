@@ -19,5 +19,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription,Integ
 
 	@Transactional(rollbackFor = Exception.class)
 	@Modifying(clearAutomatically = true)
-	void deleteByCompetitonId(int competitionId);
+	void deleteByCompetitionId(int competitionId);
 }

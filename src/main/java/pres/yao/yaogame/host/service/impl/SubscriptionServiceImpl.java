@@ -55,7 +55,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	 */
 	@Override
 	public void deleteByCompetitionId(int competitionId) {
-		subscriptionDao.deleteByCompetitonId(competitionId);
+		subscriptionDao.deleteByCompetitionId(competitionId);
 	}
 
 	/**
