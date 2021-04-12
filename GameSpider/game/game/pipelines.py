@@ -25,10 +25,25 @@ class MySQLPipeline:
     def from_crawler(cls, crawler):
         #重写了此方法,以后创建对象的时候,就会调用这个方法来获取pipeline对象
         mysql_config = crawler.settings['MYSQL_CONFIG']
+        # cls代表当前pipeline
         return cls(mysql_config)
 
     def process_item(self, item, spider):
-        self.dbpool.runInteraction()
+        result = self.dbpool.runInteraction(self.insert_item, item)
+        result.addErrback(self.insert_error)
         return item
+
+    def insert_item(self, cursor, item):
+        if item["item_name"] == "bilibili_gameType":
+            sql = "insert into esports_game(id, game_logo_url, game_name, game_sub_name) " \
+                  "VALUES (0,%s,%s,%s)"
+            args = (item['game_logoUrl'], item['game_title'], item['game_subTitle'])
+            cursor.execute(sql, args)
+
+    def insert_error(self, failure):
+        print("*"*30)
+        print(failure)
+        print("*"*30)
+
 
 

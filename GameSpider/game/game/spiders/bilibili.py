@@ -1,6 +1,8 @@
+import logging
 from urllib.parse import urljoin
 import scrapy
 from scrapy import Request
+from requests import exceptions
 import json
 import time
 from ..items import BilibiliGameTypeItem
@@ -24,6 +26,8 @@ class BilibiliSpider(scrapy.Spider):
             self.request_code = kwargs.get("request_code")
 
     def start_requests(self):
+        if self.request_code == '0':
+            self.request_code = input('爬取游戏类型/赛事分类/队伍信息输入1;爬取比赛信息输入2;爬取当天实时比分输入3:')
         if self.request_code == '1':
             yield Request(self.gameType_url, callback=self.parse_gameType)
         elif self.request_code == '2':
@@ -47,8 +51,7 @@ class BilibiliSpider(scrapy.Spider):
                                                    stime=localdate),
                           callback=self.get_total,
                           meta={'etime': localdate, 'stime': localdate})
-        elif self.request_code == '0':
-            self.request_code = input('爬取游戏类型/赛事分类/队伍信息输入1;爬取比赛信息输入2;爬取当天实时比分输入3:')
+
         else:
             print('请输入1或2或3')
 
@@ -104,15 +107,18 @@ class BilibiliSpider(scrapy.Spider):
         etime = response.meta.get('etime')
         try:
             total = result.get('data').get('page').get('total')
-            print('数据总量:', total)
-        except AttributeError:
-            print('没有获取到数据总量')
-        else:
-            yield Request(self.gameTime_url.format(pageNum=1,
-                                                   pageSize=total,
-                                                   etime=etime,
-                                                   stime=stime),
-                          callback=self.parse_gameTime)
+            if total == 0:
+                logging.warning("今天没有比赛")
+                print('今天没有比赛')
+            else:
+                print('今天比赛场数:', total)
+                yield Request(self.gameTime_url.format(pageNum=1,
+                                                       pageSize=total,
+                                                       etime=etime,
+                                                       stime=stime),
+                              callback=self.parse_gameTime)
+        except exceptions.HTTPError:
+            print('http请求错误')
 
     @staticmethod
     def parse_gameTime(response):
@@ -121,6 +127,8 @@ class BilibiliSpider(scrapy.Spider):
             games = result.get('data').get('list')
             for game in games:
                 logo_url = 'https://i0.hdslb.com/'
+                # 比赛id
+                competitionId = game.get('id')
                 #赛事轮次
                 game_stage = game.get('game_stage')
                 game_stage1 = game.get('game_stage1')
@@ -146,7 +154,8 @@ class BilibiliSpider(scrapy.Spider):
                 #赛季名称
                 season_title = game.get('season').get('title')
                 season_subTitle = game.get('season').get('sub_title')
-                item = BilibiliGameTimeItem(game_stage=game_stage,
+                item = BilibiliGameTimeItem(competitionId=competitionId,
+                                            game_stage=game_stage,
                                             game_stage1=game_stage1,
                                             game_stage2=game_stage2,
                                             stime=sTime,

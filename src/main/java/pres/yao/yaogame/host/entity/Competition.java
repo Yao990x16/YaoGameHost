@@ -22,9 +22,15 @@ public class Competition implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id",nullable = false)
 	private Integer id;
+
+	/**
+	 * @Description: 具体比赛id
+	 */
+	@Column(name = "competition_id", unique = true)
+	private String competitionId;
 
 	/**
 	 * @Description: 比赛描述/轮次

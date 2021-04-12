@@ -32,10 +32,11 @@ NEWSPIDER_MODULE = 'game.spiders'
 # # Requests的调度策略，默认优先级队列
 # SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.PriorityQueue'
 #
-# # 将爬取到的items保存到Redis 以便进行后续处理
-# ITEM_PIPELINES = {
-# 	'scrapy_redis.pipelines.RedisPipeline': 300
-# }
+# 将爬取到的items保存到Redis 以便进行后续处理
+ITEM_PIPELINES = {
+	#'scrapy_redis.pipelines.RedisPipeline': 300
+	'game.pipelines.MySQLPipeline': 300
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'game (+http://www.yourdomain.com)'

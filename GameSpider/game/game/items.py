@@ -45,7 +45,9 @@ class BilibiliGameTeamItem(scrapy.Item):
 class BilibiliGameTimeItem(scrapy.Item):
     # Item名称
     item_name = scrapy.Field()
-    #赛事轮次
+    # 比赛id
+    competitionId = scrapy.Field()
+    # 赛事轮次
     game_stage = scrapy.Field()
     game_stage1 = scrapy.Field()
     game_stage2 = scrapy.Field()
@@ -82,6 +84,8 @@ class TxtySportTypeItem(scrapy.Field):
     matchNum = scrapy.Field()
 
 class TxtySportTimeItem(scrapy.Field):
+    #具体赛事
+    competitionId = scrapy.Field()
     # Item名称
     item_name = scrapy.Field()
     #左边队伍id

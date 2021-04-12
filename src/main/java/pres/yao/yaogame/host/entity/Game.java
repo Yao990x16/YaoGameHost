@@ -22,14 +22,14 @@ public class Game implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id",nullable = false)
 	private Integer id;
 	
 	/**
 	 * @Description: 游戏/运动名称
 	 */
-	@Column(name = "game_name")
+	@Column(name = "game_name", unique = true)
 	private String gameName;
 	
 	/**

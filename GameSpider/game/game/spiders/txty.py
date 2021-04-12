@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 import json
@@ -30,6 +31,8 @@ class TxtySpider(scrapy.Spider):
 
     def start_requests(self):
         localdate = time.strftime('%Y-%m-%d', time.localtime())
+        if self.request_code == '0':
+            self.request_code = input('爬取体育类型/赛事分类/队伍信息输入1;爬取比赛信息输入2;爬取当天实时比分输入3: ')
         if self.request_code == '1':
             yield Request(self.sports_typeUrl, callback=self.parse_sportsType)
         elif self.request_code == '2':
@@ -54,8 +57,7 @@ class TxtySpider(scrapy.Spider):
                                                              endTime=localdate,
                                                              columnID=columnID),
                                   callback=self.parse_sportsTime)
-        elif self.request_code == '0':
-            self.request_code = input('爬取体育类型/赛事分类/队伍信息输入1;爬取比赛信息输入2;爬取当天实时比分输入3: ')
+
         else:
             print('请输入1或2或3')
 
@@ -98,6 +100,7 @@ class TxtySpider(scrapy.Spider):
             for data in datas:
                 matchs = datas[data]
                 for match in matchs:
+                    competitionId = match.get('mid')
                     leftID = match.get('leftID')
                     leftName = match.get('leftName')
                     leftBadge = match.get('leftBadge')
@@ -108,7 +111,8 @@ class TxtySpider(scrapy.Spider):
                     rightGoal = match.get('rightGoal')
                     matchDesc = match.get('matchDesc')
                     startTime = match.get('startTime')
-                    item = TxtySportTimeItem(leftID=leftID,
+                    item = TxtySportTimeItem(competitionId=competitionId,
+                                             leftID=leftID,
                                              leftName=leftName,
                                              leftBadge=leftBadge,
                                              leftGoal=leftGoal,
@@ -120,3 +124,5 @@ class TxtySpider(scrapy.Spider):
                                              startTime=startTime)
                     item['item_name'] = 'txty_sportTime'
                     yield item
+        else:
+            logging.warning("今天没有比赛!")
