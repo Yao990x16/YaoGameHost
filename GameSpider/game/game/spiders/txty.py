@@ -101,11 +101,11 @@ class TxtySpider(scrapy.Spider):
                 matchs = datas[data]
                 for match in matchs:
                     competitionId = match.get('mid')
-                    leftID = match.get('leftID')
+                    leftID = match.get('leftId')
                     leftName = match.get('leftName')
                     leftBadge = match.get('leftBadge')
                     leftGoal = match.get('leftGoal')
-                    rightID = match.get('rightID')
+                    rightID = match.get('rightId')
                     rightName = match.get('rightName')
                     rightBadge = match.get('rightBadge')
                     rightGoal = match.get('rightGoal')

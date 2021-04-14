@@ -111,7 +111,7 @@ class BilibiliSpider(scrapy.Spider):
                 logging.warning("今天没有比赛")
                 print('今天没有比赛')
             else:
-                print('今天比赛场数:', total)
+                print('比赛场数:', total)
                 yield Request(self.gameTime_url.format(pageNum=1,
                                                        pageSize=total,
                                                        etime=etime,
@@ -141,8 +141,8 @@ class BilibiliSpider(scrapy.Spider):
                 home_teamID = game.get('home_id')
                 away_teamID = game.get('away_id')
                 #主场/客场队伍名称
-                #home_teamTitle = game.get('home_team').get('title')
-                #away_teamTitle = game.get('away_team').get('title')
+                home_teamTitle = game.get('home_team').get('title')
+                away_teamTitle = game.get('away_team').get('title')
                 #比分
                 home_score = game.get('home_score')
                 away_score = game.get('away_score')
@@ -162,6 +162,8 @@ class BilibiliSpider(scrapy.Spider):
                                             etime=eTime,
                                             home_teamID=home_teamID,
                                             away_teamID=away_teamID,
+                                            home_teamTitle=home_teamTitle,
+                                            away_teamTitle=away_teamTitle,
                                             home_score=home_score,
                                             away_score=away_score,
                                             season_stime=season_stime,

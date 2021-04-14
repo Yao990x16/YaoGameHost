@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Table(name = "sprts_team")
+@Table(name = "sports_team")
 public class SportsTeam implements Serializable {
 	/**
 	 * @Description: 序列化版本号
