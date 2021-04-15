@@ -5,6 +5,7 @@ from scrapy import Request
 from requests import exceptions
 import json
 import time
+import math
 from ..items import BilibiliGameTypeItem
 from ..items import BilibiliGameMatchItem
 from ..items import BilibiliGameTeamItem
@@ -110,15 +111,29 @@ class BilibiliSpider(scrapy.Spider):
             if total == 0:
                 logging.warning("今天没有比赛")
                 print('今天没有比赛')
-            else:
-                print('比赛场数:', total)
+            elif 50 > total > 0:
                 yield Request(self.gameTime_url.format(pageNum=1,
                                                        pageSize=total,
                                                        etime=etime,
                                                        stime=stime),
                               callback=self.parse_gameTime)
+            else:
+                print('比赛场数:', total)
+                page = self.get_page(total)
+                for i in range(1, page+1):
+                    yield Request(self.gameTime_url.format(pageNum=i,
+                                                           pageSize=50,
+                                                           etime=etime,
+                                                           stime=stime),
+                                  callback=self.parse_gameTime)
         except exceptions.HTTPError:
             print('http请求错误')
+
+    # 获得分页的页数,向上取整
+    @staticmethod
+    def get_page(total):
+        page = math.ceil(total/50)
+        return page
 
     @staticmethod
     def parse_gameTime(response):
