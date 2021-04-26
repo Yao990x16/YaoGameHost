@@ -1,11 +1,49 @@
+import sys
+
+from time import time
 import pandas as pd
 import math
 import csv
 import random
 import numpy as np
+# 逻辑回归模型
 from sklearn import linear_model
+# 标准化操作
+from sklearn.preprocessing import scale
+# 将数据集分成测试集和训练集
+from sklearn.model_selection import train_test_split
+# 交叉验证
 from sklearn.model_selection import cross_val_score
+# 超参数调参模块
+from sklearn.model_selection import GridSearchCV
+# F1得分
+from sklearn.metrics import f1_score
+# XGBoost模型
+import xgboost as xgb
+#支持向量机分类模型
+from sklearn.svm import SVC
+# 逻辑回归模型
+from sklearn.linear_model import LogisticRegression
+# 模型评估
+from sklearn.metrics import make_scorer
+# 模型的保存与加载模块
+import joblib
 
+class Logger(object):
+	def __init__(self, fileN='Default.log'):
+		self.terminal = sys.stdout
+		self.log = open(fileN, 'a')
+
+	def write(self, message):
+		"""print实际相当于sys.stdout.write"""
+		self.terminal.write(message)
+		self.log.write(message)
+
+	def flush(self):
+		pass
+
+
+sys.stdout = Logger('train.txt')  # 调用print时相当于Logger().write()
 # 设置回归训练所用到的参数变量
 # 每支队伍没有elo等级分时,赋予基础elo等级分
 base_elo = 1600
@@ -26,6 +64,7 @@ team_name = {'Dallas Mavericks': '独行侠', 'Milwaukee Bucks': '雄鹿', 'Port
 			 'Orlando Magic': '魔术', 'Atlanta Hawks': '老鹰', 'Minnesota Timberwolves': '森林狼',
 			 'Detroit Pistons': '活塞', 'New York Knicks': '尼克斯', 'Cleveland Cavaliers': '骑士',
 			 'Chicago Bulls': '公牛', 'Golden State Warriors': '勇士', 'Charlotte Hornets': '黄蜂'}
+
 # 根据每支队伍的Miscellaneous Stats(综合统计数据)
 # Opponent Per Game Stats(所遇到的对手平均每场比赛统计信息)
 # Team Per Game Stats(每支队伍平均每场比赛的表现统计)
@@ -72,20 +111,18 @@ def calc_elo(win_team, lose_team):
 	return new_winner_rank, new_loser_rank
 
 
+#构造数据集和特征
 # noinspection PyShadowingNames
 def build_dataSet(all_data):
 	print("Building data set..")
 	X = []
 	skip = 0
 	for index, row in all_data.iterrows():
-
 		Wteam = row['WTeam']
 		Lteam = row['LTeam']
-
 		#获取最初的elo或是每个队伍最初的elo值
 		team1_elo = get_elo(Wteam)
 		team2_elo = get_elo(Lteam)
-
 		# 给主场比赛的队伍加上100的elo值
 		if row['WLoc'] == 'H':
 			team1_elo += 100
@@ -119,8 +156,15 @@ def build_dataSet(all_data):
 		new_winner_rank, new_loser_rank = calc_elo(Wteam, Lteam)
 		team_elos[Wteam] = new_winner_rank
 		team_elos[Lteam] = new_loser_rank
-
-	return np.nan_to_num(X), y
+	# 将数据随机分成训练集和测试集,并返回划分好的训练集测试集样本和训练集测试集标签
+	# nan_to_num: 如果“x”不精确，则NaN由零代替
+	# test_size：如果是浮点数，在0-1之间，表示样本占比；如果是整数的话就是样本的数量
+	# random_state：是随机数的种子
+	# stratify = y：依据标签y，按原数据y中各类比例，分配给train和test，使得train和test中各类数据的比例与原数据集一样
+	X_train, X_test, y_train, y_test = train_test_split(np.nan_to_num(X), y, test_size=0.3,
+														random_state=2, stratify=y)
+	# X_train:训练集特征值,X_test:测试集特征值,y_train:训练集目标值,y_test:测试集目标值
+	return X_train, X_test, y_train, y_test
 
 def predict_winner(team_1, team_2, train_model):
 	features = [get_elo(team_1)]
@@ -128,7 +172,6 @@ def predict_winner(team_1, team_2, train_model):
 	# team 1，客场队伍
 	for key, value in team_stats.loc[team_1].iteritems():
 		features.append(value)
-
 	# team 2，主场队伍
 	features.append(get_elo(team_2) + 100)
 	for key, value in team_stats.loc[team_2].iteritems():
@@ -138,41 +181,112 @@ def predict_winner(team_1, team_2, train_model):
 	return train_model.predict_proba([features])
 
 
+# noinspection PyShadowingNames
+def train_classifier(clf, X_train, y_train, params):
+	""" 训练模型 """
+	# 记录训练时长
+	f1_scorer = make_scorer(f1_score, pos_label=1)
+	start = time()
+	# 使用 grdi search 自动调参
+	grid_obj = GridSearchCV(clf,
+							scoring=f1_scorer,
+							param_grid=params,
+							cv=5)
+	grid_obj = grid_obj.fit(X_train, y_train)
+	# 得到最佳的模型
+	best_clf = grid_obj.best_estimator_
+	#clf.fit(X_train, y_train)
+	end = time()
+	print("训练最佳超参: ", grid_obj.best_params_)
+	print("训练时间 {:.4f} 秒".format(end - start))
+	return best_clf
+
+def predict_labels(clf, features, target):
+	""" 使用模型进行预测 """
+	# 记录预测时长
+	start = time()
+	y_pred = clf.predict(features)
+	end = time()
+	print("预测时间 in {:.4f} 秒".format(end - start))
+	return f1_score(target, y_pred, pos_label=1), sum(target == y_pred) / float(len(y_pred))
+
+
+# noinspection PyShadowingNames
+def train_predict(clf, X_train, y_train, X_test, y_test, params):
+	""" 训练并评估模型 """
+	# Indicate the classifier and the training set size
+	print("训练 {} 模型，样本数量 {}。".format(clf.__class__.__name__, len(X_train)))
+	# 训练模型
+	clf = train_classifier(clf, X_train, y_train, params)
+	# 在测试集上评估模型
+	f1, acc = predict_labels(clf, X_train, y_train)
+	train_cross = cross_val_score(clf, X_train, y_train, cv=10, scoring='accuracy',
+								  n_jobs=-1).mean()
+	print("训练集上的 F1 分数和准确率为: {:.4f} , {:.4f}。".format(f1, acc))
+	# 利用10折交叉验证计算训练正确率
+	print("训练集上的交叉验证计算训练正确率为: ", train_cross)
+
+	f1, acc = predict_labels(clf, X_test, y_test)
+	test_cross = cross_val_score(clf, X_test, y_test, cv=10, scoring='accuracy',
+								 n_jobs=-1).mean()
+	print("测试集上的 F1 分数和准确率为: {:.4f} , {:.4f}。".format(f1, acc))
+	print("测试集上的交叉验证计算训练正确率为: ", test_cross)
+
+
 if __name__ == '__main__':
 	Mstat = pd.read_csv(folder + '/19-20Miscellaneous_Stats.csv')
 	Ostat = pd.read_csv(folder + '/19-20Opponent_Per_Game_Stats.csv')
 	Tstat = pd.read_csv(folder + '/19-20Team_Per_Game_Stats.csv')
 	team_stats = initialize_data(Mstat, Ostat, Tstat)
 	result_data = pd.read_csv(folder + '/19-20_result.csv')
-	X, y = build_dataSet(result_data)
+	X_train, X_test, y_train, y_test = build_dataSet(result_data)
 	# 训练网络模型
-	print("Fitting on %d game samples.." % len(X))
-	model = linear_model.LogisticRegression(max_iter=1000)
-	model.fit(X, y)
-	# 利用10折交叉验证计算训练正确率
-	print("Doing cross-validation..")
-	print(cross_val_score(model, X, y, cv=10, scoring='accuracy', n_jobs=-1).mean())
-	# 利用训练好的model在16-17年的比赛中进行预测
-	print('Predicting on new schedule..')
-	schedule2021 = pd.read_csv(folder + '/20-21_schedule.csv')
-	result = []
-	for index, row in schedule2021.iterrows():
-		team1 = row['VTeam']
-		team2 = row['HTeam']
-		STime = row['STime']
-		pred = predict_winner(team1, team2, model)
-		prob = pred[0][0]
-		if prob > 0.5:
-			winner = team_name[team1]
-			loser = team_name[team2]
-			result.append([STime, winner, loser, prob])
-		else:
-			winner = team_name[team2]
-			loser = team_name[team1]
-			result.append([STime, winner, loser, 1 - prob])
-	with open('20-21Result.csv', 'w', encoding='utf-8', newline='') as f:
-		writer = csv.writer(f)
-		writer.writerow(['STime', 'win', 'lose', 'probability'])
-		writer.writerows(result)
-		print('预测结果生成csv..')
+	print("Fitting on %d game samples.." % len(X_train))
+	# 分别建立并初始化三个模型,设置模型对应的要自动调参的参数
+	# random_state: 随机种子数,max_iter: 最大迭代次数
+	clf_Log = LogisticRegression(max_iter=10000, random_state=42)
+	# penalty：正则化参数,solver：损失函数的优化方法
+	Log_params = {'penalty': ['l2'], 'solver': ['liblinear', 'lbfgs', 'sag']}
+	# kernel: 核函数,gamma: rbf,poly 和sigmoid的核函数参数。默认是auto，则会选择1/n_features
+	clf_SVC = SVC(random_state=42, gamma='auto')
+	SVC_params = {'C': [1, 10], 'kernel': ['rbf', 'linear', 'sigmoid']}
+	# seed: 随机种子
+	clf_XGB = xgb.XGBClassifier(seed=42, use_label_encoder=False, eval_metric='error')
+	# n_estimatores: 总共迭代的次数，即决策树的个数,max_depth：树的深度，默认值为6，典型值3-10
+	XGB_params = {'n_estimatores': [90, 100, 110], 'max_depth': [3, 7, 10]}
+
+	# 训练模型
+	train_predict(clf_Log, X_train, y_train, X_test, y_test, Log_params)
+	print('')
+	train_predict(clf_SVC, X_train, y_train, X_test, y_test, SVC_params)
+	print('')
+	train_predict(clf_XGB, X_train, y_train, X_test, y_test, XGB_params)
+	print('')
+
+	# 选取相对较好的模型
+	best_model = []
+	best_params = {}
+	# # 利用训练好的model在16-17年的比赛中进行预测
+	# print('Predicting on new schedule..')
+	# schedule2021 = pd.read_csv(folder + '/20-21_schedule.csv')
+	# result = []
+	# for index, row in schedule2021.iterrows():
+	# 	team1 = row['VTeam']
+	# 	team2 = row['HTeam']
+	# 	STime = row['STime']
+	# 	pred = predict_winner(team1, team2, model)
+	# 	prob = pred[0][0]
+	# 	if prob > 0.5:
+	# 		winner = team_name[team1]
+	# 		loser = team_name[team2]
+	# 		result.append([STime, winner, loser, prob])
+	# 	else:
+	# 		winner = team_name[team2]
+	# 		loser = team_name[team1]
+	# 		result.append([STime, winner, loser, 1 - prob])
+	# with open('20-21Result.csv', 'w', encoding='utf-8', newline='') as f:
+	# 	writer = csv.writer(f)
+	# 	writer.writerow(['STime', 'win', 'lose', 'probability'])
+	# 	writer.writerows(result)
+	# 	print('预测结果生成csv..')
 	# pd.read_csv('20-21Result.csv', header=0)
