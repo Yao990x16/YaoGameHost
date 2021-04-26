@@ -15,8 +15,22 @@ X = []
 y = []
 # 存放数据的目录
 folder = 'data'
-
-# 根据每支队伍的Miscellaneous Opponent，Team统计数据csv文件进行初始化
+#  队伍英文名称对应的中文名称
+team_name = {'Dallas Mavericks': '独行侠', 'Milwaukee Bucks': '雄鹿', 'Portland Trail Blazers': '开拓者',
+			 'Houston Rockets': '火箭', 'Los Angeles Clippers': '快船', 'New Orleans Pelicans': '鹈鹕',
+			 'Phoenix Suns': '太阳', 'Washington Wizards': '奇才', 'Memphis Grizzlies': '灰熊',
+			 'Boston Celtics': '凯尔特人', 'Miami Heat': '热火', 'Denver Nuggets': '掘金',
+			 'Toronto Raptors': '猛龙', 'San Antonio Spurs': '马刺', 'Philadelphia 76ers': '76人',
+			 'Los Angeles Lakers': '湖人', 'Brooklyn Nets': '篮网', 'Utah Jazz': '爵士',
+			 'Indiana Pacers': '步行者', 'Oklahoma City Thunder': '雷霆', 'Sacramento Kings': '国王',
+			 'Orlando Magic': '魔术', 'Atlanta Hawks': '老鹰', 'Minnesota Timberwolves': '森林狼',
+			 'Detroit Pistons': '活塞', 'New York Knicks': '尼克斯', 'Cleveland Cavaliers': '骑士',
+			 'Chicago Bulls': '公牛', 'Golden State Warriors': '勇士', 'Charlotte Hornets': '黄蜂'}
+# 根据每支队伍的Miscellaneous Stats(综合统计数据)
+# Opponent Per Game Stats(所遇到的对手平均每场比赛统计信息)
+# Team Per Game Stats(每支队伍平均每场比赛的表现统计)
+# 统计数据csv文件进行初始化
+# noinspection PyShadowingNames
 def initialize_data(Mstat, Ostat, Tstat):
 	new_Mstat = Mstat.drop(['Rk', 'Arena'], axis=1)
 	new_Ostat = Ostat.drop(['Rk', 'G', 'MP'], axis=1)
@@ -42,7 +56,7 @@ def calc_elo(win_team, lose_team):
 	loser_rank = get_elo(lose_team)
 
 	rank_diff = winner_rank - loser_rank
-	exp = (rank_diff  * -1) / 400
+	exp = (rank_diff * -1) / 400
 	odds = 1 / (1 + math.pow(10, exp))
 	# 根据rank级别修改K值
 	if winner_rank < 2100:
@@ -57,7 +71,9 @@ def calc_elo(win_team, lose_team):
 	new_loser_rank = round(loser_rank + (k * (0 - odds)))
 	return new_winner_rank, new_loser_rank
 
-def  build_dataSet(all_data):
+
+# noinspection PyShadowingNames
+def build_dataSet(all_data):
 	print("Building data set..")
 	X = []
 	skip = 0
@@ -96,7 +112,7 @@ def  build_dataSet(all_data):
 			y.append(1)
 
 		if skip == 0:
-			print('X',X)
+			print('X', X)
 			skip = 1
 
 		# 根据这场比赛的数据更新队伍的elo值
@@ -105,28 +121,6 @@ def  build_dataSet(all_data):
 		team_elos[Lteam] = new_loser_rank
 
 	return np.nan_to_num(X), y
-
-
-if __name__ == '__main__':
-
-	Mstat = pd.read_csv(folder + '/15-16Miscellaneous_Stat.csv')
-	Ostat = pd.read_csv(folder + '/15-16Opponent_Per_Game_Stat.csv')
-	Tstat = pd.read_csv(folder + '/15-16Team_Per_Game_Stat.csv')
-
-	team_stats = initialize_data(Mstat, Ostat, Tstat)
-
-	result_data = pd.read_csv(folder + '/2015-2016_result.csv')
-	X, y = build_dataSet(result_data)
-
-	# 训练网络模型
-	print("Fitting on %d game samples.." % len(X))
-
-	model = linear_model.LogisticRegression()
-	model.fit(X, y)
-
-	# 利用10折交叉验证计算训练正确率
-	print("Doing cross-validation..")
-	print(cross_val_score(model, X, y, cv=10, scoring='accuracy', n_jobs=-1).mean())
 
 def predict_winner(team_1, team_2, train_model):
 	features = [get_elo(team_1)]
@@ -143,28 +137,42 @@ def predict_winner(team_1, team_2, train_model):
 	features = np.nan_to_num(features)
 	return train_model.predict_proba([features])
 
-# 利用训练好的model在16-17年的比赛中进行预测
-def main():
+
+if __name__ == '__main__':
+	Mstat = pd.read_csv(folder + '/19-20Miscellaneous_Stats.csv')
+	Ostat = pd.read_csv(folder + '/19-20Opponent_Per_Game_Stats.csv')
+	Tstat = pd.read_csv(folder + '/19-20Team_Per_Game_Stats.csv')
+	team_stats = initialize_data(Mstat, Ostat, Tstat)
+	result_data = pd.read_csv(folder + '/19-20_result.csv')
+	X, y = build_dataSet(result_data)
+	# 训练网络模型
+	print("Fitting on %d game samples.." % len(X))
+	model = linear_model.LogisticRegression(max_iter=1000)
+	model.fit(X, y)
+	# 利用10折交叉验证计算训练正确率
+	print("Doing cross-validation..")
+	print(cross_val_score(model, X, y, cv=10, scoring='accuracy', n_jobs=-1).mean())
+	# 利用训练好的model在16-17年的比赛中进行预测
 	print('Predicting on new schedule..')
-	schedule1617 = pd.read_csv(folder + '/16-17Schedule.csv')
+	schedule2021 = pd.read_csv(folder + '/20-21_schedule.csv')
 	result = []
-	for index, row in schedule1617.iterrows():
-		team1 = row['Vteam']
-		team2 = row['Hteam']
+	for index, row in schedule2021.iterrows():
+		team1 = row['VTeam']
+		team2 = row['HTeam']
+		STime = row['STime']
 		pred = predict_winner(team1, team2, model)
 		prob = pred[0][0]
 		if prob > 0.5:
-			winner = team1
-			loser = team2
-			result.append([winner, loser, prob])
+			winner = team_name[team1]
+			loser = team_name[team2]
+			result.append([STime, winner, loser, prob])
 		else:
-			winner = team2
-			loser = team1
-			result.append([winner, loser, 1 - prob])
-
-	with open('16-17Result.csv', 'w') as f:
+			winner = team_name[team2]
+			loser = team_name[team1]
+			result.append([STime, winner, loser, 1 - prob])
+	with open('20-21Result.csv', 'w', encoding='utf-8', newline='') as f:
 		writer = csv.writer(f)
-		writer.writerow(['win', 'lose', 'probability'])
+		writer.writerow(['STime', 'win', 'lose', 'probability'])
 		writer.writerows(result)
-		print('done.')
-	pd.read_csv('16-17Result.csv', header=0)
+		print('预测结果生成csv..')
+	# pd.read_csv('20-21Result.csv', header=0)
