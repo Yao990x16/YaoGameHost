@@ -1,9 +1,8 @@
 package pres.yao.yaogame.host.service.impl;
 
 import org.springframework.stereotype.Service;
-import pres.yao.yaogame.host.dao.MatchRepository;
+import pres.yao.yaogame.host.Repository.MatchRepository;
 import pres.yao.yaogame.host.entity.Match;
-import pres.yao.yaogame.host.entity.meiju.Type;
 import pres.yao.yaogame.host.service.MatchService;
 
 import javax.annotation.Resource;

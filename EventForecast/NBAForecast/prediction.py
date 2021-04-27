@@ -1,13 +1,11 @@
-import sys
+import csv
 
+import sys
 from time import time
 import pandas as pd
 import math
-import csv
 import random
 import numpy as np
-# 逻辑回归模型
-from sklearn import linear_model
 # 标准化操作
 from sklearn.preprocessing import scale
 # 将数据集分成测试集和训练集
@@ -245,48 +243,56 @@ if __name__ == '__main__':
 	# 分别建立并初始化三个模型,设置模型对应的要自动调参的参数
 	# random_state: 随机种子数,max_iter: 最大迭代次数
 	clf_Log = LogisticRegression(max_iter=10000, random_state=42)
-	# penalty：正则化参数,solver：损失函数的优化方法
-	Log_params = {'penalty': ['l2'], 'solver': ['liblinear', 'lbfgs', 'sag']}
+	# penalty：正则化参数,solver：损失函数的优化方法,class_weight:用于标示分类模型中各种类型的权重
+	Log_params = {'penalty': ['l2'], 'solver': ['liblinear', 'lbfgs', 'sag'],
+				  'class_weight': ['balanced']}
 	# kernel: 核函数,gamma: rbf,poly 和sigmoid的核函数参数。默认是auto，则会选择1/n_features
-	clf_SVC = SVC(random_state=42, gamma='auto')
-	SVC_params = {'C': [1, 10], 'kernel': ['rbf', 'linear', 'sigmoid']}
+	clf_SVC = SVC(random_state=42, probability=True)
+	SVC_params = {'C': [1, 10], 'gamma': [0.5, 1, 1.5, 2, 5], 'class_weight': ['balanced']}
 	# seed: 随机种子
 	clf_XGB = xgb.XGBClassifier(seed=42, use_label_encoder=False, eval_metric='error')
 	# n_estimatores: 总共迭代的次数，即决策树的个数,max_depth：树的深度，默认值为6，典型值3-10
-	XGB_params = {'n_estimatores': [90, 100, 110], 'max_depth': [3, 7, 10]}
+	# min_child_weight：值越大，越容易欠拟合；值越小，越容易过拟合（值较大时，避免模型学习到局部的特殊样本）
+	# colsample_bytree: [default=1] 在建立树时对特征采样的比例
+	# subsample: [default=1]用于训练模型的子样本占整个样本集合的比例
+	XGB_params = {'n_estimators': [90, 100, 110],
+				  'max_depth': [5, 6, 7],
+				  'min_child_weight': [1, 5, 10],
+				  'gamma': [0.5, 1, 1.5, 2, 5]}
 
 	# 训练模型
-	train_predict(clf_Log, X_train, y_train, X_test, y_test, Log_params)
-	print('')
-	train_predict(clf_SVC, X_train, y_train, X_test, y_test, SVC_params)
-	print('')
-	train_predict(clf_XGB, X_train, y_train, X_test, y_test, XGB_params)
-	print('')
+	# train_predict(clf_Log, X_train, y_train, X_test, y_test, Log_params)
+	# print('')
+	# train_predict(clf_SVC, X_train, y_train, X_test, y_test, SVC_params)
+	# print('')
+	# train_predict(clf_XGB, X_train, y_train, X_test, y_test, XGB_params)
+	# print('')
 
-	# 选取相对较好的模型
-	best_model = []
-	best_params = {}
-	# # 利用训练好的model在16-17年的比赛中进行预测
-	# print('Predicting on new schedule..')
-	# schedule2021 = pd.read_csv(folder + '/20-21_schedule.csv')
-	# result = []
-	# for index, row in schedule2021.iterrows():
-	# 	team1 = row['VTeam']
-	# 	team2 = row['HTeam']
-	# 	STime = row['STime']
-	# 	pred = predict_winner(team1, team2, model)
-	# 	prob = pred[0][0]
-	# 	if prob > 0.5:
-	# 		winner = team_name[team1]
-	# 		loser = team_name[team2]
-	# 		result.append([STime, winner, loser, prob])
-	# 	else:
-	# 		winner = team_name[team2]
-	# 		loser = team_name[team1]
-	# 		result.append([STime, winner, loser, 1 - prob])
-	# with open('20-21Result.csv', 'w', encoding='utf-8', newline='') as f:
-	# 	writer = csv.writer(f)
-	# 	writer.writerow(['STime', 'win', 'lose', 'probability'])
-	# 	writer.writerows(result)
-	# 	print('预测结果生成csv..')
-	# pd.read_csv('20-21Result.csv', header=0)
+	# 选取相对较好的模型进行训练
+	best_model = LogisticRegression(max_iter=10000, random_state=42, class_weight='balanced',
+									penalty='l2', solver='lbfgs')
+	best_model.fit(X_train, y_train)
+	# 利用训练好的model在16-17年的比赛中进行预测
+	print('Predicting on new schedule..')
+	schedule2021 = pd.read_csv(folder + '/20-21_schedule.csv')
+	result = []
+	for index, row in schedule2021.iterrows():
+		team1 = row['VTeam']
+		team2 = row['HTeam']
+		STime = row['STime']
+		pred = predict_winner(team1, team2, best_model)
+		prob = pred[0][0]
+		if prob > 0.5:
+			winner = team_name[team1]
+			loser = team_name[team2]
+			result.append([STime, winner, loser, prob])
+		else:
+			winner = team_name[team2]
+			loser = team_name[team1]
+			result.append([STime, winner, loser, 1 - prob])
+	with open('20-21Result.csv', 'w', encoding='utf-8', newline='') as f:
+		writer = csv.writer(f)
+		writer.writerow(['STime', 'win', 'lose', 'probability'])
+		writer.writerows(result)
+		print('预测结果生成csv..')
+	pd.read_csv('20-21Result.csv', header=0)

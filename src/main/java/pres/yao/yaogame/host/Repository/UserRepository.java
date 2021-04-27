@@ -1,11 +1,9 @@
-package pres.yao.yaogame.host.dao;
+package pres.yao.yaogame.host.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 import pres.yao.yaogame.host.entity.User;
-
-import java.util.Optional;
 
 /**
  * @Author Fahaxiki

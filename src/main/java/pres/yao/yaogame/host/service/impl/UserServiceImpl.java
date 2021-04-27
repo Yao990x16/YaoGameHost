@@ -1,7 +1,7 @@
 package pres.yao.yaogame.host.service.impl;
 
 import org.springframework.stereotype.Service;
-import pres.yao.yaogame.host.dao.UserRepository;
+import pres.yao.yaogame.host.Repository.UserRepository;
 import pres.yao.yaogame.host.entity.User;
 import pres.yao.yaogame.host.service.UserService;
 

@@ -1,11 +1,9 @@
-package pres.yao.yaogame.host.dao;
+package pres.yao.yaogame.host.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import pres.yao.yaogame.host.entity.Match;
-import pres.yao.yaogame.host.entity.meiju.Type;
 
 import java.util.List;
-import java.util.regex.Matcher;
 
 /**
  * @Author Fahaxiki

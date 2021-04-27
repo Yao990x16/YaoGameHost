@@ -1,4 +1,4 @@
-package pres.yao.yaogame.host.dao;
+package pres.yao.yaogame.host.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
