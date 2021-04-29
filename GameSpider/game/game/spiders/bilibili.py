@@ -51,6 +51,7 @@ class BilibiliSpider(scrapy.Spider):
                                                    etime=localdate,
                                                    stime=localdate),
                           callback=self.get_total,
+                          dont_filter=True,
                           meta={'etime': localdate, 'stime': localdate})
 
         else:
