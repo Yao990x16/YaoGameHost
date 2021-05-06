@@ -12,8 +12,8 @@ public enum Type {
 	/**
 	 * @Description: 赛事类型
 	 */
-	ESports("电子竞技"),
-	Sports("传统体育");
+	电子竞技("电子竞技"),
+	传统体育("传统体育");
 
 	@Getter
 	@Setter

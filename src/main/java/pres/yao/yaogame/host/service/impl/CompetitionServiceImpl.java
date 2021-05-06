@@ -3,6 +3,7 @@ package pres.yao.yaogame.host.service.impl;
 import org.springframework.stereotype.Service;
 import pres.yao.yaogame.host.Repository.CompetitionRepository;
 import pres.yao.yaogame.host.entity.Competition;
+import pres.yao.yaogame.host.entity.meiju.Type;
 import pres.yao.yaogame.host.service.CompetitionService;
 
 import javax.annotation.Resource;
@@ -28,7 +29,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 	 * @Description: 根据赛程类型, 电竞/传统体育来获得赛程信息
 	 */
 	@Override
-	public List<Competition> getByCompetitionType(String competitionType) {
+	public List<Competition> getByCompetitionType(Type competitionType) {
 		return competitionDao.findByCompetitionType(competitionType);
 	}
 
@@ -54,13 +55,13 @@ public class CompetitionServiceImpl implements CompetitionService {
 	 * @Description: 根据开始时间获得赛程信息
 	 */
 	@Override
-	public List<Competition> getByStartTime(String startTime) {
-		return competitionDao.findByStartTime(startTime);
+	public List<Competition> getByStartTimeLike(String startTime) {
+		return competitionDao.findByStartTimeLike("%"+startTime+"%");
 	}
 
 	/**
 	 * @param compType
-	 * @param stime
+	 * @param sTime
 	 * @MethodName: getByCompTypeAndSTime
 	 * @Param: [compType, stime]
 	 * @ParamType: [java.lang.String, java.lang.String]
@@ -68,7 +69,7 @@ public class CompetitionServiceImpl implements CompetitionService {
 	 * @Description: 根据赛程类型和开始时间获取赛程信息
 	 */
 	@Override
-	public List<Competition> getByCompTypeAndSTime(String compType, String sTime) {
-		return competitionDao.findByCompetitionTypeAndStartTime(compType,sTime);
+	public List<Competition> getByCompTypeAndSTimeLike(Type compType, String sTime) {
+		return competitionDao.findByCompetitionTypeAndStartTimeLike(compType,sTime);
 	}
 }

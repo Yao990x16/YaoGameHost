@@ -19,7 +19,7 @@ public interface CompetitionService {
 	 * @return: java.util.List<pres.yao.yaogame.host.entity.Competition>
 	 * @Description: 根据赛程类型,电竞/传统体育来获得赛程信息
 	 */
-	List<Competition> getByCompetitionType(String competitionType);
+	List<Competition> getByCompetitionType(Type competitionType);
 
 	/**
 	 * @MethodName: getByGameStage
@@ -37,7 +37,7 @@ public interface CompetitionService {
 	 * @return: java.util.List<pres.yao.yaogame.host.entity.Competition>
 	 * @Description: 根据开始时间获得赛程信息
 	 */
-	List<Competition> getByStartTime(String startTime);
+	List<Competition> getByStartTimeLike(String startTime);
 
 	/**
 	 * @MethodName: getByCompTypeAndSTime
@@ -46,5 +46,5 @@ public interface CompetitionService {
 	 * @return: java.util.List<pres.yao.yaogame.host.entity.Competition>
 	 * @Description: 根据赛程类型和开始时间获取赛程信息
 	 */
-	List<Competition> getByCompTypeAndSTime(String compType,String sTime);
+	List<Competition> getByCompTypeAndSTimeLike(Type compType,String sTime);
 }

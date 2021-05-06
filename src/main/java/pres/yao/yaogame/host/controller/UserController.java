@@ -48,14 +48,14 @@ public class UserController {
 	 * @return: void
 	 * @Description: 用户注册
 	 */
-	@RequestMapping("/saveUser")
-	public HashMap<String, String> saveUser(String name,String password,String email) {
+	@RequestMapping("/register")
+	public HashMap<String, String> saveUser(String username,String password,String email) {
 		HashMap<String,String> hashMap = new HashMap<>(16);
-		User oldUser = userService.findByName(name);
+		User oldUser = userService.findByName(username);
 		if(oldUser==null){
 			try {
 				User user = new User();
-				user.setUsername(name);
+				user.setUsername(username);
 				user.setPassword(password);
 				user.setEmail(email);
 				userService.register(user);
@@ -84,6 +84,9 @@ public class UserController {
 		if(user != null){
 			return new HashMap<>(16){{
 				put("msg","ok");
+				put("username",user.getUsername());
+				put("password",user.getPassword());
+				put("email",user.getEmail());
 			}};
 		}else{
 			return new HashMap<>(16){{

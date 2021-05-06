@@ -21,12 +21,12 @@ public class SubscriptionController {
 	@Resource
 	private SubscriptionService subscriptionService;
 
-	@RequestMapping("getCompsByUserName")
+	@RequestMapping("/getCompsByUserName")
 	public List<Subscription> getCompsByUserName(String userName) {
 		return subscriptionService.findByUserName(userName);
 	}
 
-	@RequestMapping("deleteByCompId")
+	@RequestMapping("/deleteByCompId")
 	public String deleteByCompId(int compId) {
 		Subscription sub = subscriptionService.findByCompetitionId(compId);
 		if(sub!=null){
@@ -36,7 +36,14 @@ public class SubscriptionController {
 			return "删除失败";
 		}
 	}
-
+	
+	/**
+	 * @MethodName: subsComp
+	 * @Param: [userName, compId]
+	 * @ParamType: [java.lang.String, int]			
+	 * @return: java.lang.String
+	 * @Description: 用户订阅比赛
+	 */
 	@RequestMapping("/subsComp")
 	public String subsComp(String userName,int compId){
 		if(userName!=null && compId!=0){

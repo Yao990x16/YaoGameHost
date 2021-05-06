@@ -3,11 +3,20 @@ package pres.yao.yaogame.host.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pres.yao.yaogame.host.entity.Competition;
+import pres.yao.yaogame.host.entity.CompetitionAS;
+import pres.yao.yaogame.host.entity.ESportsTeam;
+import pres.yao.yaogame.host.entity.SportsTeam;
+import pres.yao.yaogame.host.entity.meiju.Type;
 import pres.yao.yaogame.host.service.CompetitionService;
+import pres.yao.yaogame.host.service.ESportsTeamService;
+import pres.yao.yaogame.host.service.SportsTeamService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-
+import pres.yao.yaogame.host.utils.GSONCompetitionAS;
 /**
  * @Author Fahaxiki
  * @ClassName CompetitionController
@@ -19,15 +28,22 @@ import java.util.List;
 public class CompetitionController {
 	@Resource
 	private CompetitionService competitionService;
+	@Resource
+	private ESportsTeamService esportsTeamService;
+	@Resource
+	private SportsTeamService sportsTeamService;
+
 
 	@RequestMapping("/getByCompType")
-	public List<Competition> getByCompType(String compType) {
+	public List<Competition> getByCompType(Type compType) {
 		return competitionService.getByCompetitionType(compType);
 	}
 
-	@RequestMapping("/getByCompTypeAndSTime")
-	public List<Competition> getByCompTypeAndSTime(String compType, String sTime){
-		return competitionService.getByCompTypeAndSTime(compType, sTime);
+	@RequestMapping("/getByCompTypeAndSTimeLike")
+	public List<CompetitionAS> getByCompTypeAndSTimeLike(Type compType, String sTime){
+		 List<Competition> list = competitionService.getByCompTypeAndSTimeLike(compType,
+				 "%"+sTime+"%");
+		return GSONCompetitionAS.getCompetitionAS(list, esportsTeamService, sportsTeamService);
 	}
 
 	@RequestMapping("/getByGameStage")
@@ -36,7 +52,7 @@ public class CompetitionController {
 	}
 
 	@RequestMapping("/getBySTime")
-	public List<Competition> getBySTime(String sTime){
-		return competitionService.getByStartTime(sTime);
+	public List<Competition> getBySTimeLike(String sTime){
+		return competitionService.getByStartTimeLike("%"+sTime+"%");
 	}
 }
