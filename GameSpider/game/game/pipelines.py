@@ -148,6 +148,28 @@ class MySQLPipeline:
             args = (item['competitionId'])
             cursor.execute(sql, args)
             count = cursor.fetchone()[0]
+
+            sqlLeftTeam = "select count(team_id) from esports_team where team_id=%s"
+            argsLeftTeam = (item['home_teamID'])
+            cursor.execute(sqlLeftTeam, argsLeftTeam)
+            countLeftTeam = cursor.fetchone()[0]
+            if countLeftTeam == 0:
+                sqlLeftTeam1 = "insert into esports_team(id, team_id, team_logo_url, tean_name, " \
+                               "team_sub_name) VALUES (0,%s,%s,%s,null)"
+                argsLeftTeam1 = (item['home_teamID'], item['home_teamIcon'], item['home_teamTitle'])
+                logging.warning("数据库没有有源数据,执行插入语句")
+                cursor.execute(sqlLeftTeam1, argsLeftTeam1)
+            sqlRightTeam = "select count(team_id) from esports_team where team_id=%s"
+            argsRightTeam = (item['away_teamID'])
+            cursor.execute(sqlRightTeam, argsRightTeam)
+            countRightTeam = cursor.fetchone()[0]
+            if countRightTeam == 0:
+                sqlRightTeam1 = "insert into esports_team(id, team_id, team_logo_url, tean_name, " \
+                               "team_sub_name) VALUES (0,%s,%s,%s,null)"
+                argsRightTeam1 = (item['away_teamID'], item['away_teamIcon'],
+                                  item['away_teamTitle'])
+                logging.warning("数据库没有有源数据,执行插入语句")
+                cursor.execute(sqlRightTeam1, argsRightTeam1)
             # print("*"*50)
             # print(count)
             # print("*"*50)
@@ -163,8 +185,12 @@ class MySQLPipeline:
                 logging.warning("数据库没有有源数据,执行插入语句")
                 cursor.execute(sql, args)
             else:
-                sql = "update competition set left_score=%s,right_score=%s where competition_id=%s"
-                args = (item['home_score'], item['away_score'], item['competitionId'])
+                sql = "update competition set left_name=%s,left_score=%s," \
+                      "right_name=%s,right_score=%s where " \
+                      "competition_id=%s"
+                args = (item['home_teamTitle'], item['home_score'],
+                        item['away_teamTitle'], item['away_score'],
+                        item['competitionId'])
                 logging.warning("数据库有数据,执行更新语句")
                 cursor.execute(sql, args)
 

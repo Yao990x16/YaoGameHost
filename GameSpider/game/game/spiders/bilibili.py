@@ -156,6 +156,9 @@ class BilibiliSpider(scrapy.Spider):
                 #主客场队伍id
                 home_teamID = game.get('home_id')
                 away_teamID = game.get('away_id')
+                #主场客场队伍icon
+                home_teamIcon = urljoin(logo_url, game.get('home_team').get('logo'))
+                away_teamIcon = urljoin(logo_url, game.get('away_team').get('logo'))
                 #主场/客场队伍名称
                 home_teamTitle = game.get('home_team').get('title')
                 away_teamTitle = game.get('away_team').get('title')
@@ -178,6 +181,8 @@ class BilibiliSpider(scrapy.Spider):
                                             etime=eTime,
                                             home_teamID=home_teamID,
                                             away_teamID=away_teamID,
+                                            home_teamIcon=home_teamIcon,
+                                            away_teamIcon=away_teamIcon,
                                             home_teamTitle=home_teamTitle,
                                             away_teamTitle=away_teamTitle,
                                             home_score=home_score,

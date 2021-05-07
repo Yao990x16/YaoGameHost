@@ -57,6 +57,9 @@ class BilibiliGameTimeItem(scrapy.Item):
     # 主客场队伍id
     home_teamID = scrapy.Field()
     away_teamID = scrapy.Field()
+    # 主客场队伍icon
+    home_teamIcon = scrapy.Field()
+    away_teamIcon = scrapy.Field()
     # 主客场队伍名称
     home_teamTitle = scrapy.Field()
     away_teamTitle = scrapy.Field()
