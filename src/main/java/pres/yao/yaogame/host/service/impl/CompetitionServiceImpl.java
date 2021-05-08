@@ -72,4 +72,17 @@ public class CompetitionServiceImpl implements CompetitionService {
 	public List<Competition> getByCompTypeAndSTimeLike(Type compType, String sTime) {
 		return competitionDao.findByCompetitionTypeAndStartTimeLike(compType,sTime);
 	}
+
+	/**
+	 * @param competitionId
+	 * @MethodName: getByCompetitionId
+	 * @Param: [competitionId]
+	 * @ParamType: [java.lang.String]
+	 * @return: pres.yao.yaogame.host.entity.Competition
+	 * @Description: 根据比赛id获取比赛
+	 */
+	@Override
+	public Competition getByCompetitionId(String competitionId) {
+		return competitionDao.findByCompetitionId(competitionId);
+	}
 }

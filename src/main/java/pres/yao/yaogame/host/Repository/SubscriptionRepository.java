@@ -14,10 +14,17 @@ import java.util.List;
  * @Date 2021/3/10
  */
 public interface SubscriptionRepository extends JpaRepository<Subscription,Integer> {
-	Subscription findByCompetitionId(int competitionId);
+	Subscription findByCompetitionId(String competitionId);
+
 	List<Subscription> findByUserName(String userName);
+
+	Subscription findByCompetitionIdAndUserName(String competitionId, String userName);
 
 	@Transactional(rollbackFor = Exception.class)
 	@Modifying(clearAutomatically = true)
-	void deleteByCompetitionId(int competitionId);
+	void deleteByCompetitionId(String competitionId);
+
+	@Transactional(rollbackFor = Exception.class)
+	@Modifying(clearAutomatically = true)
+	void deleteByCompetitionIdAndAndUserName(String competitionId, String userName);
 }

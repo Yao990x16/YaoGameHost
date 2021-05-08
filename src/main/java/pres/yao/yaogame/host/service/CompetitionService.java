@@ -47,4 +47,13 @@ public interface CompetitionService {
 	 * @Description: 根据赛程类型和开始时间获取赛程信息
 	 */
 	List<Competition> getByCompTypeAndSTimeLike(Type compType,String sTime);
+	
+	/**
+	 * @MethodName: getByCompetitionId
+	 * @Param: [competitionId]
+	 * @ParamType: [java.lang.String]			
+	 * @return: pres.yao.yaogame.host.entity.Competition
+	 * @Description: 根据比赛id获取比赛
+	 */
+	Competition getByCompetitionId(String competitionId);
 }

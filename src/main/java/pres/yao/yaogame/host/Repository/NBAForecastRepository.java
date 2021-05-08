@@ -10,6 +10,6 @@ import pres.yao.yaogame.host.entity.NBAForecast;
  * @Date 2021/4/26
  */
 public interface NBAForecastRepository extends JpaRepository<NBAForecast,Integer> {
-	NBAForecast findByStartTimeAndWinTeamOrLoseTeam(String startTime, String winTeam,
-													String loseTeam);
+	NBAForecast findByStartTimeLikeAndWinTeam(String startTime, String winTeam);
+	NBAForecast findByStartTimeLikeAndLoseTeam(String startTime, String loseTeam);
 }

@@ -19,6 +19,7 @@ public interface CompetitionRepository extends JpaRepository<Competition,Integer
 
 	List<Competition> findByStartTimeLike(String startTime);
 
-	List<Competition> findByCompetitionTypeAndStartTimeLike(Type competitionType,
-														   String startTime);
+	List<Competition> findByCompetitionTypeAndStartTimeLike(Type competitionType, String startTime);
+
+	Competition findByCompetitionId(String competitionId);
 }

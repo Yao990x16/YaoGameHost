@@ -25,7 +25,7 @@ February_2021 = pd.read_csv('data/February_2021.csv')
 March_2021 = pd.read_csv('data/March_2021.csv')
 April_2021 = pd.read_csv('data/April_2021.csv')
 May_2021 = pd.read_csv('data/May_2021.csv')
-schedules = [January_2021, February_2021, May_2021, April_2021, May_2021]
+schedules = [January_2021, February_2021, March_2021, April_2021, May_2021]
 
 def get19_20result():
 	# 新文件的列
@@ -72,8 +72,8 @@ def get20_21schedule():
 				sET = row['Start (ET)']
 			try:
 				STime = date+' '+sET
-				STime = time.strptime(STime, "%a %b %d %Y %I:%S%p")
-				STime = time.strftime("%Y-%m-%d %H:%M:%S", STime)
+				STime = time.strptime(STime, "%a %b %d %Y %I:%M%p")
+				STime = time.strftime("%Y-%m-%d %H:%M", STime)
 				print('EST:', STime)
 				STime = timezone_translate(STime)
 				print('Asia/Shanghai:', STime)
@@ -95,7 +95,7 @@ def timezone_translate(est_time_str):
 	# 北京时区
 	local_tz = pytz.timezone('Asia/Shanghai')
 	# 所需要的时间打印格式
-	local_format = "%Y-%m-%d %H:%M:%S"
+	local_format = "%Y-%m-%d %H:%M"
 	est_dt = datetime.datetime.strptime(est_time_str, local_format)
 	# 将原有时区换成我们需要的
 	local_dt = est_dt.replace(tzinfo=est_tz).astimezone(local_tz)

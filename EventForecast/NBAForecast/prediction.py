@@ -272,7 +272,7 @@ if __name__ == '__main__':
 	best_model = LogisticRegression(max_iter=10000, random_state=42, class_weight='balanced',
 									penalty='l2', solver='lbfgs')
 	best_model.fit(X_train, y_train)
-	# 利用训练好的model在16-17年的比赛中进行预测
+	# 利用训练好的model在20-21年的比赛中进行预测
 	print('Predicting on new schedule..')
 	schedule2021 = pd.read_csv(folder + '/20-21_schedule.csv')
 	result = []

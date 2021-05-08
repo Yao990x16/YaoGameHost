@@ -38,7 +38,7 @@ public class CompetitionController {
 	public List<CompetitionAS> getByCompTypeAndSTimeLike(Type compType, String sTime){
 		 List<Competition> list = competitionService.getByCompTypeAndSTimeLike(compType,
 				 "%"+sTime+"%");
-		return GSONCompetitionAS.getCompetitionAS(list, esportsTeamService, sportsTeamService);
+		return GSONCompetitionAS.getCompetitionASList(list,esportsTeamService,sportsTeamService);
 	}
 
 	@RequestMapping("/getByGameStage")

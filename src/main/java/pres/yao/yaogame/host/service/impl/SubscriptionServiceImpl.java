@@ -28,7 +28,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	 * @Description: 根据比赛id查找
 	 */
 	@Override
-	public Subscription findByCompetitionId(int competitionId) {
+	public Subscription findByCompetitionId(String competitionId) {
 		return subscriptionDao.findByCompetitionId(competitionId);
 	}
 
@@ -54,7 +54,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	 * @Description: 根据赛程id删除用户订阅表中对应的订阅信息
 	 */
 	@Override
-	public void deleteByCompetitionId(int competitionId) {
+	public void deleteByCompetitionId(String competitionId) {
 		subscriptionDao.deleteByCompetitionId(competitionId);
 	}
 
@@ -69,5 +69,33 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	@Override
 	public void subscribe(Subscription subscription) {
 		subscriptionDao.saveAndFlush(subscription);
+	}
+
+	/**
+	 * @param competitionId
+	 * @param userName
+	 * @MethodName: findByCompetitionIdAndUserName
+	 * @Param: [competitionId, userName]
+	 * @ParamType: [java.lang.String, java.lang.String]
+	 * @return: pres.yao.yaogame.host.entity.Subscription
+	 * @Description: 根据用户名和比赛id查找
+	 */
+	@Override
+	public Subscription findByCompetitionIdAndUserName(String competitionId, String userName) {
+		return subscriptionDao.findByCompetitionIdAndUserName(competitionId, userName);
+	}
+
+	/**
+	 * @param competitionId
+	 * @param userName
+	 * @MethodName: deleteByCompetitionIdAndAndUserName
+	 * @Param: [competitionId, userName]
+	 * @ParamType: [java.lang.String, java.lang.String]
+	 * @return: void
+	 * @Description: 根据比赛ID和用户名删除
+	 */
+	@Override
+	public void deleteByCompetitionIdAndAndUserName(String competitionId, String userName) {
+		deleteByCompetitionIdAndAndUserName(competitionId, userName);
 	}
 }
