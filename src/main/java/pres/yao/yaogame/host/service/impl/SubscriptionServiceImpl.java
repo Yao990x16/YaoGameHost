@@ -81,8 +81,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	 * @Description: 根据用户名和比赛id查找
 	 */
 	@Override
-	public Subscription findByCompetitionIdAndUserName(String competitionId, String userName) {
-		return subscriptionDao.findByCompetitionIdAndUserName(competitionId, userName);
+	public Subscription findByUserNameAndCompetitionId(String userName, String competitionId) {
+		return subscriptionDao.findByUserNameAndCompetitionId(userName, competitionId);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	 * @Description: 根据比赛ID和用户名删除
 	 */
 	@Override
-	public void deleteByCompetitionIdAndAndUserName(String competitionId, String userName) {
-		deleteByCompetitionIdAndAndUserName(competitionId, userName);
+	public void deleteByUserNameAndCompetitionId(String userName, String competitionId) {
+		subscriptionDao.deleteByUserNameAndCompetitionId(userName, competitionId);
 	}
 }

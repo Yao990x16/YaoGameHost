@@ -54,7 +54,7 @@ public interface SubscriptionService {
 	 * @return: pres.yao.yaogame.host.entity.Subscription
 	 * @Description: 根据用户名和比赛id查找
 	 */
-	public Subscription findByCompetitionIdAndUserName(String competitionId, String userName);
+	public Subscription findByUserNameAndCompetitionId(String userName, String competitionId);
 	
 	/**
 	 * @MethodName: deleteByCompetitionIdAndAndUserName
@@ -63,5 +63,5 @@ public interface SubscriptionService {
 	 * @return: void
 	 * @Description: 根据比赛ID和用户名删除
 	 */
-	public void deleteByCompetitionIdAndAndUserName(String competitionId, String userName);
+	public void deleteByUserNameAndCompetitionId(String userName, String competitionId);
 }

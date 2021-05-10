@@ -13,7 +13,6 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "user_subscription")
 public class Subscription implements Serializable {
@@ -28,16 +27,19 @@ public class Subscription implements Serializable {
 	private Integer id;
 
 	/**
-	 * @Description: 比赛id
-	 */
-	@NonNull
-	@Column(name = "competition_id")
-	private String competitionId;
-	
-	/**
 	 * @Description: 用户名,用来关联用户
 	 */
-	@NonNull
 	@Column(name = "username")
 	private String userName;
+
+	/**
+	 * @Description: 比赛id
+	 */
+	@Column(name = "competition_id")
+	private String competitionId;
+
+	public Subscription(String userName, String competitionId) {
+		this.userName = userName;
+		this.competitionId = competitionId;
+	}
 }

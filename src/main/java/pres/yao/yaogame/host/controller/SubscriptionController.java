@@ -46,14 +46,30 @@ public class SubscriptionController {
 		return competitionASList;
 	}
 
+	@RequestMapping("getByUserNameAndCompId")
+	public HashMap<String, String> getByUserNameAndCompId(String userName, String competitionId){
+		Subscription userSubs = subscriptionService.findByUserNameAndCompetitionId(userName, competitionId);
+		return userSubs==null?new HashMap<>(16){{
+			put("msg","没有订阅");
+		}}:new HashMap<>(16){{
+			put("userName",userSubs.getUserName());
+			put("msg","已经订阅");
+		}};
+	}
+
 	@RequestMapping("/deleteByCompId")
-	public String deleteByCompId(String userName,String compId) {
-		Subscription userSubs = subscriptionService.findByCompetitionIdAndUserName(userName, compId);
+	public HashMap<String, String> deleteByCompId(String userName,String competitionId) {
+		Subscription userSubs = subscriptionService.findByUserNameAndCompetitionId(userName, competitionId);
 		if(userSubs!=null){
-			subscriptionService.deleteByCompetitionIdAndAndUserName(userName, compId);
-			return "删除成功";
+			subscriptionService.deleteByUserNameAndCompetitionId(userName, competitionId);
+			return new HashMap<>(16){{
+				put("userName",userSubs.getUserName());
+				put("msg","取消成功");
+			}};
 		}else{
-			return "删除失败";
+			return new HashMap<>(16){{
+				put("msg","取消失败");
+			}};
 		}
 	}
 	
@@ -65,13 +81,20 @@ public class SubscriptionController {
 	 * @Description: 用户订阅比赛
 	 */
 	@RequestMapping("/subsComp")
-	public String subsComp(String userName,String compId){
-		Subscription userSubs = subscriptionService.findByCompetitionIdAndUserName(userName, compId);
+	public HashMap<String, String>subsComp(String userName,String competitionId){
+		Subscription userSubs = subscriptionService.findByUserNameAndCompetitionId(userName,competitionId);
 		if(userSubs==null){
-			subscriptionService.subscribe(new Subscription(userName, compId));
-			return "订阅成功";
+			Subscription subs = new Subscription(userName, competitionId);
+			subscriptionService.subscribe(subs);
+			return new HashMap<>(16){{
+				put("userName",subs.getUserName());
+				put("msg","订阅成功");
+			}};
 		}else{
-			return "订阅失败";
+			return new HashMap<>(16){{
+				put("userName",userSubs.getUserName());
+				put("msg","订阅失败");
+			}};
 		}
 	}
 }

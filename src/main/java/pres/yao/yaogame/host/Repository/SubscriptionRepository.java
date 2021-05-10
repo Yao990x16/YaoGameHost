@@ -18,7 +18,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription,Integ
 
 	List<Subscription> findByUserName(String userName);
 
-	Subscription findByCompetitionIdAndUserName(String competitionId, String userName);
+	Subscription findByUserNameAndCompetitionId(String userName, String competitionId);
 
 	@Transactional(rollbackFor = Exception.class)
 	@Modifying(clearAutomatically = true)
@@ -26,5 +26,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription,Integ
 
 	@Transactional(rollbackFor = Exception.class)
 	@Modifying(clearAutomatically = true)
-	void deleteByCompetitionIdAndAndUserName(String competitionId, String userName);
+	void deleteByUserNameAndCompetitionId(String userName, String competitionId);
 }
