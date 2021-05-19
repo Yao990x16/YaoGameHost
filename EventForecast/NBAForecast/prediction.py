@@ -1,5 +1,4 @@
 import csv
-
 import sys
 from time import time
 import pandas as pd
@@ -126,17 +125,14 @@ def build_dataSet(all_data):
 			team1_elo += 100
 		else:
 			team2_elo += 100
-
 		# 把elo当为评价每个队伍的第一个特征值
 		team1_features = [team1_elo]
 		team2_features = [team2_elo]
-
 		# 添加我们从basketball reference.com获得的每个队伍的统计信息
 		for key, value in team_stats.loc[Wteam].iteritems():
 			team1_features.append(value)
 		for key, value in team_stats.loc[Lteam].iteritems():
 			team2_features.append(value)
-
 		# 将两支队伍的特征值随机的分配在每场比赛数据的左右两侧
 		# 并将对应的0/1赋给y值
 		if random.random() > 0.5:
@@ -145,20 +141,13 @@ def build_dataSet(all_data):
 		else:
 			X.append(team2_features + team1_features)
 			y.append(1)
-
 		if skip == 0:
 			print('X', X)
 			skip = 1
-
 		# 根据这场比赛的数据更新队伍的elo值
 		new_winner_rank, new_loser_rank = calc_elo(Wteam, Lteam)
 		team_elos[Wteam] = new_winner_rank
 		team_elos[Lteam] = new_loser_rank
-	# 将数据随机分成训练集和测试集,并返回划分好的训练集测试集样本和训练集测试集标签
-	# nan_to_num: 如果“x”不精确，则NaN由零代替
-	# test_size：如果是浮点数，在0-1之间，表示样本占比；如果是整数的话就是样本的数量
-	# random_state：是随机数的种子
-	# stratify = y：依据标签y，按原数据y中各类比例，分配给train和test，使得train和test中各类数据的比例与原数据集一样
 	X_train, X_test, y_train, y_test = train_test_split(np.nan_to_num(X), y, test_size=0.3,
 														random_state=2, stratify=y)
 	# X_train:训练集特征值,X_test:测试集特征值,y_train:训练集目标值,y_test:测试集目标值

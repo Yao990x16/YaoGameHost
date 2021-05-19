@@ -27,13 +27,22 @@ def db_insert():
 		winTeam = row['win']
 		loseTeam = row['lose']
 		probability = '%.2f' % row['probability']
+		sql0 = "select count(*) from nba_forecast where start_time=%s and win_team=%s and " \
+			"lose_team=%s"
+
 		sql = "insert into nba_forecast(id, lose_team, probability, start_time, win_team) values(" \
 			  			"0,%s,%s,%s,%s)"
 		try:
+			args0 = (startTime, winTeam, loseTeam)
 			args = (loseTeam, probability, startTime, winTeam)
-			print('插入数据: ', args)
-			cursor.execute(sql, args)
-			db.commit()
+			cursor.execute(sql0, args0)
+			count = cursor.fetchone()[0]
+			if count == 0:
+				print('插入数据: ', args)
+				cursor.execute(sql, args)
+				db.commit()
+			else:
+				print('有重复数据', args0)
 		except Exception as e:
 			handle_error(e)
 			db.rollback()

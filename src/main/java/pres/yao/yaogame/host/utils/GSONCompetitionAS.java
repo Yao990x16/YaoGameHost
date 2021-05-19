@@ -25,13 +25,13 @@ public class GSONCompetitionAS {
 		String type = competition.getCompetitionType().getType();
 		String leftIcon, rightIcon;
 		if ("电子竞技".equals(type)) {
-			ESportsTeam leftTeam = esportsTeamService.findByTeamName(competition.getLeftName());
+			ESportsTeam leftTeam = esportsTeamService.findByTeamId(competition.getLeftId());
 			if (leftTeam == null) {
 				leftIcon = "";
 			} else {
 				leftIcon = leftTeam.getTeamLogoUrl();
 			}
-			ESportsTeam rightTeam = esportsTeamService.findByTeamName(competition.getRightName());
+			ESportsTeam rightTeam = esportsTeamService.findByTeamId(competition.getRightId());
 			if (rightTeam == null) {
 				rightIcon = "";
 			} else {
